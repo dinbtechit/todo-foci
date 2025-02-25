@@ -1,7 +1,7 @@
 'use client';
 import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {useEffect} from "react";
-import {AlarmClock, Ellipsis, Pencil, SquareCheckBig, Trash2} from "lucide-react";
+import {AlarmClock, Ellipsis, SquareCheckBig, Trash2} from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -13,6 +13,7 @@ import {
 import {todoState} from "@/components/todo/state/todo-state";
 import {useAtom} from "jotai";
 import {useLoadTodos} from "@/components/todo/state/todo-state-hook";
+import {TodoTitle} from "@/components/todo/components/todo-title";
 
 
 export default function TodoList() {
@@ -37,10 +38,13 @@ export default function TodoList() {
         await loadTodos()
     }
 
-    const completedToggle = async (id: string) => {
+    const completedToggle = async (id: string, completed: boolean) => {
         const response = await fetch(`/api/todos/${id}`, {
             method: "PUT",
-            headers: {"Content-Type": "application/json"}
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                completed: completed,
+            })
         });
         await response.json();
         await loadTodos()
@@ -68,8 +72,7 @@ export default function TodoList() {
                                 <CardHeader className="flex flex-row justify-center items-center p-5">
                                     <div className="flex-1 space-y-2">
                                         <CardTitle className="inline-flex justify-center items-center">
-                                            {todo.title}
-                                            <Pencil className="ml-2 w-4 h-4 text-gray-400"/>
+                                            <TodoTitle todo={todo}/>
                                         </CardTitle>
                                         <CardDescription>
                                             <div className="inline-flex items-center flex-1">
@@ -91,12 +94,14 @@ export default function TodoList() {
                                             <DropdownMenuContent>
                                                 {todo.completed ?
                                                     <>
-                                                        <DropdownMenuItem onClick={() => completedToggle(todo.id)}>
+                                                        <DropdownMenuItem
+                                                            onClick={() => completedToggle(todo.id, false)}>
                                                             <SquareCheckBig/>Mark as Pending</DropdownMenuItem>
                                                         <DropdownMenuSeparator/>
                                                     </> :
                                                     <>
-                                                        <DropdownMenuItem onClick={() => completedToggle(todo.id)}>
+                                                        <DropdownMenuItem
+                                                            onClick={() => completedToggle(todo.id, true)}>
                                                             <SquareCheckBig/>Mark as Completed</DropdownMenuItem>
                                                         <DropdownMenuSeparator/></>
                                                 }

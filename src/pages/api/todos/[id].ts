@@ -11,9 +11,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method === 'PUT') {
         if (!id) return res.status(400).json({error: 'ID is required'});
+        const {title, dueDate, completed} = req.body;
         const todoToUpdate = await todoRepo.findOneBy({id} as Todo);
         if (!todoToUpdate) return res.status(404).json({error: 'Todo not found'});
-        todoToUpdate.completed = !todoToUpdate.completed;
+        if (title) {
+            todoToUpdate.title = title;
+        }
+        if (completed || completed === false) {
+            todoToUpdate.completed = completed;
+        }
+        if (dueDate) {
+            todoToUpdate.dueDate = dueDate;
+        }
         await todoRepo.save(todoToUpdate);
         return res.status(200).json(todoToUpdate);
     }
