@@ -23,8 +23,6 @@ export default function TodoList() {
 
     const completedCSS = `dark:border-green-200 dark:bg-green-500/30 dark:text-green-100
                                         border-green-400 bg-green-100 text-green-950`
-    /* const pendingCSS = `dark:border-orange-200 dark:bg-yellow-400/30 dark:text-orange-100
-                                             border-yellow-400 bg-yellow-100 text-orange-950`*/
 
     useEffect(() => {
         loadTodos()

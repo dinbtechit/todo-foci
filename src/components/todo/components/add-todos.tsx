@@ -29,7 +29,7 @@ export default function AddTodos() {
     }
 
     return (
-        <div className="flex flex-row justify-center items-center w-full">
+        <button className="flex flex-row justify-center items-center w-full">
             <Input type="text" placeholder="Search..." className="max-w-2xl md:text-2xl h-16"/>
 
             <div onClick={addTodo}
@@ -37,6 +37,6 @@ export default function AddTodos() {
                            items-center w-28 bg-[#1F2937] hover:bg-[#1F2937]/60">
                 <Plus className="w-16 h-16  text-white"/>
             </div>
-        </div>
+        </button>
     )
 }
