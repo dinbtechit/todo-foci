@@ -21,16 +21,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             // Create a new todo
             case 'POST':
-                const {title} = req.body;
+                const {title, dueDate} = req.body;
                 const user = {id: "b47cfce4-771f-4d89-9502-1fc366844cd6"} as User;
-                console.log(title);
                 if (!title) return res.status(400).json({error: 'Title is required'});
-                //if (!dueDate) return res.status(400).json({error: 'DueDate is required'});
-                const dueDate = new Date();
+                if (!dueDate) return res.status(400).json({error: 'DueDate is required'});
                 const createdAt = new Date();
                 const newTodo = todoRepo.create({title, dueDate, user, createdAt});
                 await todoRepo.save(newTodo);
                 return res.status(201).json(newTodo);
+
             // for all methods
             default:
                 return res.status(405).json({error: 'Method Not Allowed'});

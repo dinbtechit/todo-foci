@@ -13,12 +13,12 @@ export default function Login() {
                         <hr className="mt-8"/>
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1 flex flex-col justify-center items-start space-y-4">
+                <CardContent className="flex-1 flex flex-col justify-center items-start space-y-2">
                     <span>Email:</span>
                     <Input placeholder="Enter your E-mail"/>
                 </CardContent>
                 <CardFooter>
-                    <Link href="/">
+                    <Link href="/" className="w-full">
                         <Button className="bg-primary hover:bg-primary/95 w-full">Login</Button>
                     </Link>
                 </CardFooter>

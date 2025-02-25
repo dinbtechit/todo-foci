@@ -3,6 +3,7 @@
 import {useTheme} from "next-themes";
 import {useEffect, useState} from "react";
 import {Moon, SunMoon} from "lucide-react";
+import {Button} from "@/components/ui/button";
 
 export function ThemeToggle() {
     const {theme, setTheme} = useTheme();
@@ -15,12 +16,11 @@ export function ThemeToggle() {
     if (!mounted) return null;
 
     return (
-        <button
-            className="p-2 bg-gray-800 text-gray-300 rounded-md inline-flex"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        <Button variant={'secondary'}
+                className="rounded-md inline-flex"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
-            {theme === "dark" ? (<Moon className="mr-1"/>) :
-                (<SunMoon className="mr-1"/>)}
-        </button>
+            {theme === "dark" ? (<Moon className="scale-150"/>) : (<SunMoon className="scale-150"/>)}
+        </Button>
     );
 }

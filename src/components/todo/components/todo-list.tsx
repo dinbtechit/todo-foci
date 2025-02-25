@@ -33,8 +33,7 @@ export default function TodoList() {
             method: "DELETE",
             headers: {"Content-Type": "application/json"}
         });
-        const data = await response.json();
-        console.log(data);
+        await response.json();
         await loadTodos()
     }
 
@@ -43,8 +42,7 @@ export default function TodoList() {
             method: "PUT",
             headers: {"Content-Type": "application/json"}
         });
-        const data = await response.json();
-        console.log(data);
+        await response.json();
         await loadTodos()
     }
 
@@ -77,8 +75,8 @@ export default function TodoList() {
                                             <div className="inline-flex items-center flex-1">
                                                 <AlarmClock/> <span className="ml-2">
                                                 {Intl.DateTimeFormat('en-CA', {
-                                                    hour: '2-digit',
-                                                    minute: '2-digit',
+                                                    dateStyle: 'full',
+                                                    timeStyle: 'short',
                                                     hour12: true,
                                                 }).format(new Date(todo.dueDate))}
                                             </span>
