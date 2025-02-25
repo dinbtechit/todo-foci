@@ -1,4 +1,4 @@
-import {todoState} from "@/components/todo/state/todo-state";
+import {groupTodoByDateState, todoState} from "@/components/todo/state/todo-state";
 import {useAtom} from "jotai";
 
 export const useLoadTodos = () => {
@@ -12,8 +12,21 @@ export const useLoadTodos = () => {
     return {loadTodos};
 };
 
+export const useLoadGroupTodosByDate = () => {
+    const [, setTodosByDate] = useAtom(groupTodoByDateState)
+    const loadTodosByDate = async () => {
+        const response = await fetch('/api/todos/group');
+        if (!response.ok) throw new Error('Failed to fetch todos');
+        const data = await response.json();
+        console.log(data)
+        setTodosByDate(data);
+    }
+    return {loadTodosByDate};
+};
+
 export const useUpdateTodos = () => {
     const {loadTodos} = useLoadTodos();
+    const {loadTodosByDate} = useLoadGroupTodosByDate();
     const updateTodo = async (id: string, title?: string, dueDate?: Date, completed?: boolean) => {
         const response = await fetch(`/api/todos/${id}`, {
             method: "PUT",
@@ -26,6 +39,7 @@ export const useUpdateTodos = () => {
         });
         if (!response.ok) throw new Error('Failed to update todos');
         await loadTodos()
+        await loadTodosByDate()
     }
 
     return {updateTodo};
@@ -33,12 +47,18 @@ export const useUpdateTodos = () => {
 
 
 export const useSearchTodos = () => {
-    const [, setTodos] = useAtom(todoState)
-    const searchTodos = async () => {
-        const response = await fetch('/api/todos');
+    const [, setTodosByDate] = useAtom(groupTodoByDateState)
+    const searchTodos = async (searchText: string) => {
+        const response = await fetch('/api/todos/search', {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                searchText
+            }),
+        });
         if (!response.ok) throw new Error('Failed to fetch todos');
         const data = await response.json();
-        setTodos(data);
+        setTodosByDate(data)
     }
     return {searchTodos};
 };

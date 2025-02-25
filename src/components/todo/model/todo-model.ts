@@ -3,5 +3,6 @@ export interface Todo {
     title: string;
     dueDate: Date;
     completed: boolean;
-    userId: string;
 }
+
+export type GroupTodosByDate = { date: string, todos: Todo[] }

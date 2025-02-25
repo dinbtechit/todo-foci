@@ -2,7 +2,7 @@
 
 import {useState} from "react";
 import {useForm} from "react-hook-form";
-import {useLoadTodos} from "@/components/todo/state/todo-state-hook";
+import {useLoadGroupTodosByDate, useLoadTodos} from "@/components/todo/state/todo-state-hook";
 import {
     Dialog,
     DialogContent,
@@ -32,6 +32,7 @@ type FormData = z.infer<typeof schema>;
 export function AddTodoDialog() {
     const [open, setOpen] = useState(false);
     const {loadTodos} = useLoadTodos();
+    const {loadTodosByDate} = useLoadGroupTodosByDate()
 
     const form = useForm<FormData>({
         defaultValues: {
@@ -60,6 +61,7 @@ export function AddTodoDialog() {
         const newData = await response.json();
         console.log('Todo created:', newData);
         loadTodos();
+        loadTodosByDate();
         setOpen(false);
         form.reset();
     };
