@@ -3,7 +3,7 @@ import {useSearchTodos} from "@/components/todo/state/todo-state-hook";
 import {useEffect, useState} from "react";
 import {Search} from "lucide-react";
 
-export default function AddTodos() {
+export default function SearchTodo() {
     const {searchTodos} = useSearchTodos()
     const [loading, setLoading] = useState(false)
     const [searchText, setSearchText] = useState("")
