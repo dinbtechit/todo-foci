@@ -70,7 +70,7 @@ export function AddTodoDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button title={'Add Todo'} className="w-320 rounded-2xl text-white font-semibold text-lg">
+                <Button className="w-320 rounded-2xl text-white font-semibold text-lg">
                     <Plus className="scale-150 text-white"/> Create Todo
                 </Button>
             </DialogTrigger>

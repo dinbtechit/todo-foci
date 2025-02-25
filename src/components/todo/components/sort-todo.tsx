@@ -11,11 +11,30 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useAtom} from "jotai";
+import {filterTodoState} from "@/components/todo/state/todo-state";
+import {SortBy} from "@/components/todo/model/todo-model";
 
 export default function SortTodo() {
     const [groupByDates, setGroupByDates] = useState(true)
-    const [sortByDates, setSortByDates] = useState('date_asc')
+    const [sortBy, setSortBy] = useState<SortBy | string>('date_asc')
+    const [, setFilterTodo] = useAtom(filterTodoState)
+
+    useEffect(() => {
+        const groupByDatesLocalStore = (window.localStorage.getItem("groupByDates") ?? "true") === "true";
+        const sortByLocalStore = window.localStorage.getItem("sortBy") ?? 'date_asc';
+        setGroupByDates(groupByDatesLocalStore)
+        setSortBy(sortByLocalStore)
+        setFilterTodo({groupByDates: groupByDatesLocalStore, sortBy: sortByLocalStore})
+    }, []);
+
+    useEffect(() => {
+        window.localStorage.setItem("groupByDates", String(groupByDates));
+        window.localStorage.setItem("sortBy", sortBy);
+        setFilterTodo({groupByDates, sortBy: sortBy})
+    }, [groupByDates, sortBy])
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -31,7 +50,7 @@ export default function SortTodo() {
                     Group By Dates
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuSeparator/>
-                <DropdownMenuRadioGroup value={sortByDates} onValueChange={setSortByDates}>
+                <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
                     <DropdownMenuLabel>Sort By Dates</DropdownMenuLabel>
                     <DropdownMenuRadioItem value="date_asc">Ascending</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="date_desc">Descending</DropdownMenuRadioItem>

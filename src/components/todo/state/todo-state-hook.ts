@@ -1,5 +1,6 @@
-import {groupTodoByDateState, todoState} from "@/components/todo/state/todo-state";
+import {filterTodoState, groupTodoByDateState, todoState} from "@/components/todo/state/todo-state";
 import {useAtom} from "jotai";
+import {todoHttpClient} from "@/services/todo-http-client";
 
 export const useLoadTodos = () => {
     const [, setTodos] = useAtom(todoState)
@@ -26,6 +27,7 @@ export const useLoadGroupTodosByDate = () => {
 export const useUpdateTodos = () => {
     const {loadTodos} = useLoadTodos();
     const {loadTodosByDate} = useLoadGroupTodosByDate();
+    const [filterTodo,] = useAtom(filterTodoState)
     const updateTodo = async (id: string, title?: string, dueDate?: Date, completed?: boolean) => {
         const response = await fetch(`/api/todos/${id}`, {
             method: "PUT",
@@ -37,8 +39,11 @@ export const useUpdateTodos = () => {
             }),
         });
         if (!response.ok) throw new Error('Failed to update todos');
-        await loadTodos()
-        await loadTodosByDate()
+        if (filterTodo.groupByDates) {
+            await loadTodosByDate()
+        } else {
+            await loadTodos()
+        }
     }
 
     return {updateTodo};
@@ -47,17 +52,9 @@ export const useUpdateTodos = () => {
 
 export const useSearchTodos = () => {
     const [, setTodosByDate] = useAtom(groupTodoByDateState)
-    const searchTodos = async (searchText: string) => {
-        const response = await fetch('/api/todos/search', {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                searchText
-            }),
-        });
-        if (!response.ok) throw new Error('Failed to fetch todos');
-        const data = await response.json();
+    const search = async (searchText: string) => {
+        const data = await todoHttpClient.searchTodos(searchText);
         setTodosByDate(data)
     }
-    return {searchTodos};
+    return {searchTodos: search};
 };

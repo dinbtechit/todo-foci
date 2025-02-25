@@ -1,8 +1,8 @@
 import {ThemeToggle} from "@/components/ui/theme-toggle";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
-import SearchTodo from "@/components/todo/components/search-todo";
 import SortTodo from "@/components/todo/components/sort-todo";
+import SearchTodo from "@/components/todo/components/search-todo";
 
 export default function Header() {
     return (

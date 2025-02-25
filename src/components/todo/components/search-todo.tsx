@@ -1,32 +1,31 @@
 'use client';
-import {useSearchTodos} from "@/components/todo/state/todo-state-hook";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Search} from "lucide-react";
+import {useSearchTodos} from "@/components/todo/state/todo-state-hook";
 
 export default function SearchTodo() {
+
     const {searchTodos} = useSearchTodos()
     const [loading, setLoading] = useState(false)
-    const [searchText, setSearchText] = useState('')
 
-    useEffect(() => {
+    const search = (searchText: string) => {
         setLoading(true);
         const delayDebounceFn = setTimeout(async () => {
             if (searchText || "" === searchText) {
                 await searchTodos(searchText)
                 setLoading(false)
             }
-        }, 300);
+        }, 150);
 
         // Cleanup timeout to prevent any memory issues
         return () => clearTimeout(delayDebounceFn);
-    }, [searchText]);
+    }
 
     return (
         <div className="bg-white rounded flex flex-row justify-center items-center w-full gap-4 h-10 pr-2">
             <Search className="text-gray-800 ml-2"/>
             <input type="text" placeholder="Search..."
-                   value={searchText}
-                   onInput={e => setSearchText((e.target as HTMLInputElement).value)}
+                   onInput={e => search((e.target as HTMLInputElement).value)}
                    className="-ml-3 bg-white bg-transparent rounded border-none outline-0 w-full  text-gray-800 h-full"/>
 
 

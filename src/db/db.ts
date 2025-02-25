@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
     database: 'todo',
     entities: [Todo, User],
     synchronize: true,
-    logging: true,
+    logging: false,
 });
 
 export async function connectDB() {
