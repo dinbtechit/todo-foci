@@ -17,5 +17,5 @@ bun dev
 
 # Future Improvement
 
-1. Database indexing and partitioning
+1. Database indexing for Fuzzy match
 2. Event Driven approach to keep all tabs in Sync

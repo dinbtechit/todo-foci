@@ -18,7 +18,6 @@ export const useLoadGroupTodosByDate = () => {
         const response = await fetch('/api/todos/group');
         if (!response.ok) throw new Error('Failed to fetch todos');
         const data = await response.json();
-        console.log(data)
         setTodosByDate(data);
     }
     return {loadTodosByDate};
