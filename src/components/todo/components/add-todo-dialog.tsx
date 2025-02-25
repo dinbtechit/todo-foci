@@ -19,6 +19,7 @@ import {DateTimePicker} from "@/components/ui/datetime-picker";
 import {Form, FormField, FormMessage} from "@/components/ui/form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {Plus} from "lucide-react";
 
 const schema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -69,7 +70,9 @@ export function AddTodoDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Add Todo</Button>
+                <Button title={'Add Todo'} className="w-320 rounded-2xl text-white font-semibold text-lg">
+                    <Plus className="scale-150 text-white"/> Create Todo
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader className="space-y-8">

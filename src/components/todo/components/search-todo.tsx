@@ -6,7 +6,7 @@ import {Search} from "lucide-react";
 export default function SearchTodo() {
     const {searchTodos} = useSearchTodos()
     const [loading, setLoading] = useState(false)
-    const [searchText, setSearchText] = useState("")
+    const [searchText, setSearchText] = useState('')
 
     useEffect(() => {
         setLoading(true);
@@ -17,9 +17,9 @@ export default function SearchTodo() {
             }
         }, 300);
 
-        // Cleanup timeout on re-render or unmount
+        // Cleanup timeout to prevent any memory issues
         return () => clearTimeout(delayDebounceFn);
-    }, [searchText]); // Trigger effect when searchText changes
+    }, [searchText]);
 
     return (
         <div className="bg-white rounded flex flex-row justify-center items-center w-full gap-4 h-10 pr-2">
