@@ -17,7 +17,7 @@ import {GroupTodosByDate, Todo} from "@/components/todo/model/todo-model";
 import {useEffect, useState} from "react";
 import {cn} from "@/lib/utils";
 import {Skeleton} from "@/components/ui/skeleton";
-import {AddTodoDialog} from "@/components/todo/components/add-todo-dialog";
+import {AddEditTodoDialog} from "@/components/todo/components/add-edit-todo-dialog";
 import {Button} from "@/components/ui/button";
 
 
@@ -190,7 +190,7 @@ function TodoCard(props: { todo: Todo, className?: string, headerClassName?: str
                         <CardDescription>
                             <div className="inline-flex items-center flex-1">
 
-                                <AddTodoDialog todo={selectedTodo} trigger={
+                                <AddEditTodoDialog todo={selectedTodo} trigger={
                                     <Button variant="secondary" className="p-2"
                                             onClick={() => setSelectedTodo(props.todo)}>
                                         <AlarmClock/>

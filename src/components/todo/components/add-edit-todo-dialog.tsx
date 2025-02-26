@@ -23,7 +23,7 @@ interface AddDialogProps {
     todo?: Todo
 }
 
-export function AddTodoDialog({trigger, todo}: AddDialogProps) {
+export function AddEditTodoDialog({trigger, todo}: AddDialogProps) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const {updateTodo} = useUpdateTodos();
