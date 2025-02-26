@@ -2,7 +2,9 @@
 
 ![login](login.png)
 
-![img.png](img.png)
+![img_2.png](img_2.png)
+
+![img_1.png](img_1.png)
 
 ## Getting Started
 
@@ -20,6 +22,11 @@ bun dev
 
 # Future Improvement
 
+### Authentication
+
+1. The current authentication is handled via cookies on the server-side, which works well for demo purposes but isn't
+   ideal for production. Implement OAuth and social logins for Authentication.
+
 ### Performance:
 
 1. Database indexing for full text search
@@ -30,8 +37,8 @@ bun dev
 
 ### Maintainability:
 
-1. Add more test cases
-2. Some Code Refactoring
+1. Add Unit and E2E Tests
+2. Refactoring to improve DRY and readability
 
 ### Error Handling
 

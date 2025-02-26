@@ -54,7 +54,7 @@ export default function Login() {
                     <span className="text-sm font-semibold text-gray-500">Accepted Characters:</span>
                     <ul className="text-sm text-gray-500/90 list-disc">
                         <ol> - Max 8 characters</ol>
-                        <ol> - Alpha-Numeric, special characters, even emoji's 🎉</ol>
+                        <ol> - Alpha-Numeric, special characters, even emoji&#39;s 🎉</ol>
                         <ol> - lowercase only</ol>
                     </ul>
                     <hr className="w-full"/>
