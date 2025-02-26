@@ -3,13 +3,17 @@ import {AppDataSource, connectDB} from "@/db/db";
 import {Todo} from "@/db/entities/todo";
 import {User} from "@/db/entities/user";
 import {SortBy} from "@/components/todo/model/todo-model";
-import {FindOptionsOrder} from "typeorm";
+import {FindOptionsOrder, FindOptionsWhere} from "typeorm";
+import cookie from "cookie";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
     const todoRepo = AppDataSource.getRepository(Todo);
     const {sortBy} = req.query
+    const cookies = cookie.parse(req.headers.cookie || '');
+    const userId = cookies?.user ?? '';
+    const user = {id: userId} as User;
 
     try {
         switch (req.method) {
@@ -37,7 +41,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         dueDate: 'ASC',
                     }
                 }
+
+                if (!user) return res.status(400).json({error: 'User is required'});
+
                 const todos = await todoRepo.find({
+                    where: {user: {id: user.id}} as FindOptionsWhere<Todo>,
                     order: orderBy
                 });
                 return res.status(200).json(todos);
@@ -45,7 +53,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Create a new todo
             case 'POST':
                 const {title, dueDate} = req.body;
-                const user = {id: "b47cfce4-771f-4d89-9502-1fc366844cd6"} as User;
                 if (!title) return res.status(400).json({error: 'Title is required'});
                 if (!dueDate) return res.status(400).json({error: 'DueDate is required'});
                 const createdAt = new Date();

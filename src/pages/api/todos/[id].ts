@@ -2,6 +2,8 @@ import {NextApiRequest, NextApiResponse} from "next";
 import {AppDataSource, connectDB} from "@/db/db";
 import {Todo} from "@/db/entities/todo";
 import {FindOptionsWhere} from "typeorm";
+import cookie from "cookie";
+import {User} from "@/db/entities/user";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -9,11 +11,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const todoRepo = AppDataSource.getRepository(Todo);
 
     const {id} = req.query;
+    const cookies = cookie.parse(req.headers.cookie || '');
+    const userId = cookies?.user ?? '';
+    const user = {id: userId} as User;
 
     if (req.method === 'PUT') {
         if (!id) return res.status(400).json({error: 'ID is required'});
         const {title, dueDate, completed} = req.body;
-        const todoToUpdate = await todoRepo.findOneBy({id} as FindOptionsWhere<Todo>);
+        const todoToUpdate = await todoRepo.findOneBy({
+            where: {id, user}
+        } as FindOptionsWhere<Todo>);
         if (!todoToUpdate) return res.status(404).json({error: 'Todo not found'});
         if (title) {
             todoToUpdate.title = title;
@@ -33,7 +40,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({error: "Post ID is required"});
         }
 
-        const todoToDelete = await todoRepo.findOneBy({id} as FindOptionsWhere<Todo>);
+        const todoToDelete = await todoRepo.findOneBy({
+            where: {id, user}
+        } as FindOptionsWhere<Todo>);
         if (!todoToDelete) return res.status(404).json({error: 'Todo not found'});
         await todoRepo.remove(todoToDelete);
         return res.status(200).json({message: `Todo ${id} - deleted successfully`});
