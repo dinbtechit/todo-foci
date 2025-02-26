@@ -1,15 +1,35 @@
 'use client';
 import {ThemeToggle} from "@/components/ui/theme-toggle";
-import {Button} from "@/components/ui/button";
 import SortTodo from "@/components/todo/components/sort-todo";
 import SearchTodo from "@/components/todo/components/search-todo";
 import {useRouter} from "next/navigation";
-import {isLoggedInState} from "@/components/user/state/user-state";
+import {isLoggedInState, userState} from "@/components/user/state/user-state";
 import {useAtom} from "jotai";
+import {useEffect} from "react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {ChevronDown, User} from "lucide-react";
 
 export default function Header() {
     const [isLoggedIn, setLoggedin] = useAtom(isLoggedInState)
     const router = useRouter()
+    const [user, setUser] = useAtom(userState)
+
+    useEffect(() => {
+        const loadUser = async () => {
+            const res = await fetch('/api/user', {method: 'GET',})
+            const user = await res.json()
+            console.log(user);
+            setUser(user)
+        }
+        loadUser()
+    }, [isLoggedIn]);
 
     const logout = () => {
         fetch('/api/logout', {
@@ -34,14 +54,26 @@ export default function Header() {
         <header className="flex flex-col md:flex-row md:items-center md:justify-between p-4 bg-[#159D7B] gap-2 ">
             <h1 className="order-1 text-2xl inline-block whitespace-nowrap font-bold text-white">Foci To-Do</h1>
             <div className="order-3 md:order-2 w-full md:max-w-2xl inline-flex gap-2 justify-center items-center">
-                {isLoggedIn &&
+                {user &&
                     <><SearchTodo/><SortTodo/></>
                 }
             </div>
             <div className="order-2 md:order-3 flex items-center gap-4">
                 <ThemeToggle/>
-                {isLoggedIn &&
-                    <Button variant={'ghost'} onClick={logout}>Logout</Button>
+                {user &&
+                    <DropdownMenu>
+                        <DropdownMenuTrigger
+                            className="inline-flex justify-between gap-2 rounded-lg shadow bg-black/95 hover:bg-gray-800/90 p-2 min-w-40">
+                            <span className="inline-flex gap-2"><User/> {user?.email}</span> <ChevronDown/>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator/>
+                            <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
                 }
             </div>
         </header>

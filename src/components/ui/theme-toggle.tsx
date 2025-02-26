@@ -16,9 +16,9 @@ export function ThemeToggle() {
     if (!mounted) return null;
 
     return (
-        <Button variant={'secondary'}
-                className="rounded-md inline-flex"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        <Button
+            className="bg-black/95 hover:bg-gray-800/90 rounded-md inline-flex text-white"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
         >
             {theme === "dark" ? (<Moon className="scale-150"/>) : (<SunMoon className="scale-150"/>)}
         </Button>

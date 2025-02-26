@@ -1,6 +1,5 @@
 import {AppDataSource} from "@/db/db";
 import {User} from "@/db/entities/user";
-import {FindOneOptions} from "typeorm";
 
 
 export async function registerUser(email: string) {
@@ -17,5 +16,5 @@ export async function getUserByEmail(email: string) {
 
 export async function getUserById(id: string) {
     const userRepository = AppDataSource.getRepository(User);
-    return userRepository.findOne({id} as FindOneOptions<User>);
+    return userRepository.findOne({where: {id}});
 }

@@ -13,31 +13,30 @@ export default function Login() {
     const router = useRouter();
     const [, setLoggedin] = useAtom(isLoggedInState)
 
-    const login = () => {
+    const login = async () => {
         if (!email) {
             setError("Please enter your email");
         } else {
             setError("");
 
             // Get user Details
-            fetch('/api/user', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({email}),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        setLoggedin(true);
-                        router.push('/home');
-                    }
+            try {
+                const response = await fetch('/api/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({email}),
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    setError('An error occurred');
-                });
+                const data = await response.json()
+                if (data) {
+                    setLoggedin(true);
+                    router.push('/home');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                setError('An error occurred');
+            }
         }
     }
 

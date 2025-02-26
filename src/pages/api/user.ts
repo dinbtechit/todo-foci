@@ -1,6 +1,6 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import {connectDB} from "@/db/db";
-import {getUserByEmail, registerUser} from "@/db/user-repo";
+import {getUserByEmail, getUserById, registerUser} from "@/db/user-repo";
 import cookie from "cookie";
 
 
@@ -12,7 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             case 'GET':
                 const cookies = cookie.parse(req.headers.cookie || '');
                 const userId = cookies?.user ?? '';
-                const userRepo = await getUserByEmail(userId);
+                if (!userId) return res.status(400).json(null);
+                const userRepo = await getUserById(userId);
                 return res.status(200).json(userRepo);
 
             // Create a new todo
