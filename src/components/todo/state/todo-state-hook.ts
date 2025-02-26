@@ -4,8 +4,10 @@ import {todoHttpClient} from "@/services/todo-http-client";
 
 export const useLoadTodos = () => {
     const [, setTodos] = useAtom(todoState)
+    const [filterTodo,] = useAtom(filterTodoState)
     const loadTodos = async () => {
-        const response = await fetch('/api/todos');
+        const sortQuery = `groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
+        const response = await fetch(`/api/todos?${sortQuery}`);
         if (!response.ok) throw new Error('Failed to fetch todos');
         const data = await response.json();
         setTodos(data);
@@ -15,10 +17,13 @@ export const useLoadTodos = () => {
 
 export const useLoadGroupTodosByDate = () => {
     const [, setTodosByDate] = useAtom(groupTodoByDateState)
+    const [filterTodo,] = useAtom(filterTodoState)
     const loadTodosByDate = async () => {
-        const response = await fetch('/api/todos/group');
+        const sortQuery = `groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
+        const response = await fetch(`/api/todos/group?${sortQuery}`);
         if (!response.ok) throw new Error('Failed to fetch todos');
         const data = await response.json();
+        console.log(data)
         setTodosByDate(data);
     }
     return {loadTodosByDate};
@@ -52,9 +57,15 @@ export const useUpdateTodos = () => {
 
 export const useSearchTodos = () => {
     const [, setTodosByDate] = useAtom(groupTodoByDateState)
+    const [, setTodos] = useAtom(todoState)
+    const [filterTodo,] = useAtom(filterTodoState)
     const search = async (searchText: string) => {
-        const data = await todoHttpClient.searchTodos(searchText);
-        setTodosByDate(data)
+        const data = await todoHttpClient.searchTodos(searchText, filterTodo);
+        if (filterTodo.groupByDates) {
+            setTodosByDate(data)
+        } else {
+            setTodos(data)
+        }
     }
     return {searchTodos: search};
 };

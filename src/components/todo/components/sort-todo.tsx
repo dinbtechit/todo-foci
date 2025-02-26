@@ -14,26 +14,34 @@ import {
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {filterTodoState} from "@/components/todo/state/todo-state";
-import {SortBy} from "@/components/todo/model/todo-model";
+import {SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
 
 export default function SortTodo() {
     const [groupByDates, setGroupByDates] = useState(true)
     const [sortBy, setSortBy] = useState<SortBy | string>('date_asc')
+    const [sortGroupBy, setSortGroupBy] = useState<SortGroupBy | string>('asc')
     const [, setFilterTodo] = useAtom(filterTodoState)
 
     useEffect(() => {
         const groupByDatesLocalStore = (window.localStorage.getItem("groupByDates") ?? "true") === "true";
+        const sortByGroupLocalStore = window.localStorage.getItem("sortGroupBy") ?? 'asc';
         const sortByLocalStore = window.localStorage.getItem("sortBy") ?? 'date_asc';
         setGroupByDates(groupByDatesLocalStore)
+        setSortGroupBy(sortByGroupLocalStore)
         setSortBy(sortByLocalStore)
-        setFilterTodo({groupByDates: groupByDatesLocalStore, sortBy: sortByLocalStore})
+        setFilterTodo({
+            groupByDates: groupByDatesLocalStore,
+            sortGroupBy: sortByGroupLocalStore,
+            sortBy: sortByLocalStore
+        })
     }, []);
 
     useEffect(() => {
         window.localStorage.setItem("groupByDates", String(groupByDates));
+        window.localStorage.setItem("sortGroupBy", String(sortGroupBy));
         window.localStorage.setItem("sortBy", sortBy);
-        setFilterTodo({groupByDates, sortBy: sortBy})
-    }, [groupByDates, sortBy])
+        setFilterTodo({groupByDates, sortGroupBy: sortGroupBy, sortBy: sortBy})
+    }, [groupByDates, sortGroupBy, sortBy])
 
     return (
         <DropdownMenu>
@@ -50,6 +58,13 @@ export default function SortTodo() {
                     Group By Dates
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuSeparator/>
+                {groupByDates &&
+                    <><DropdownMenuRadioGroup value={sortGroupBy} onValueChange={setSortGroupBy}>
+                        <DropdownMenuLabel>Sort Group By</DropdownMenuLabel>
+                        <DropdownMenuRadioItem value="asc">Ascending</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="desc">Descending</DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup><DropdownMenuSeparator/></>
+                }
                 <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
                     <DropdownMenuLabel>Sort By Dates</DropdownMenuLabel>
                     <DropdownMenuRadioItem value="date_asc">Ascending</DropdownMenuRadioItem>

@@ -2,20 +2,43 @@ import type {NextApiRequest, NextApiResponse} from 'next';
 import {AppDataSource, connectDB} from "@/db/db";
 import {Todo} from "@/db/entities/todo";
 import {User} from "@/db/entities/user";
+import {SortBy} from "@/components/todo/model/todo-model";
+import {FindOptionsOrder} from "typeorm";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
     const todoRepo = AppDataSource.getRepository(Todo);
+    const {sortBy} = req.query
 
     try {
         switch (req.method) {
             // Get all todos
             case 'GET':
-                const todos = await todoRepo.find({
-                    order: {
-                        dueDate: 'ASC'
+                let orderBy: FindOptionsOrder<Todo> = {
+                    dueDate: 'ASC',
+                    title: 'ASC',
+                }
+                if (sortBy && (sortBy as SortBy) === 'date_desc') {
+                    orderBy = {
+                        dueDate: 'DESC',
+                        title: 'ASC',
                     }
+                }
+                if (sortBy && (sortBy as SortBy) === 'title_asc') {
+                    orderBy = {
+                        title: 'ASC',
+                        dueDate: 'ASC',
+                    }
+                }
+                if (sortBy && (sortBy as SortBy) === 'title_desc') {
+                    orderBy = {
+                        title: 'DESC',
+                        dueDate: 'ASC',
+                    }
+                }
+                const todos = await todoRepo.find({
+                    order: orderBy
                 });
                 return res.status(200).json(todos);
 

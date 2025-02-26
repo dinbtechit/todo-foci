@@ -1,16 +1,22 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import {connectDB} from "@/db/db";
-import {searchAndGroupTodosByDueDate} from "@/db/todo-repo";
+import {searchGroupTodos} from "@/db/todo-repo";
+import {SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
+    const {groupByDates, sortGroupBy, sortBy} = req.query
     try {
         switch (req.method) {
             // Get grouped Todos
             case 'POST':
                 const {searchText} = req.body;
                 console.log('searching...' + req.body);
-                const todos = await searchAndGroupTodosByDueDate(searchText ?? '');
+                const todos = await searchGroupTodos(searchText ?? '', {
+                    groupByDates: groupByDates === "true",
+                    sortGroupBy: sortGroupBy as SortGroupBy,
+                    sortBy: sortBy as SortBy
+                });
                 return res.status(200).json(todos);
 
             // for all methods

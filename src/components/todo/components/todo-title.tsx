@@ -31,7 +31,7 @@ export function TodoTitle({todo}: TodoTitleProps) {
     }
 
     return (
-        <>
+        <div className="inline-flex items-center justify-center">
             {editing ? <div
                     ref={titleEditRef}
                     contentEditable
@@ -58,7 +58,7 @@ export function TodoTitle({todo}: TodoTitleProps) {
                     </Button>
                 </div>
             )}
-        </>
+        </div>
     )
 
 }

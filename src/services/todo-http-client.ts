@@ -1,6 +1,10 @@
+import {FilterTodo} from "@/components/todo/model/todo-model";
+
 class TodoHttpClient {
-    searchTodos = async (searchText: string) => {
-        const response = await fetch('/api/todos/search', {
+    searchTodos = async (searchText: string, filterTodo: FilterTodo) => {
+        const sortQuery = `groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
+        console.log(sortQuery)
+        const response = await fetch(`/api/todos/search?${sortQuery}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
