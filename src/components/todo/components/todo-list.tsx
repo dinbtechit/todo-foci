@@ -44,7 +44,7 @@ export default function TodoList() {
     const todoList = filterTodo.groupByDates ? <GroupedTodoList todos={todosGroupedByDate}/> :
         <SingleViewTodoList todos={todos}/>
     const todoLoading = filterTodo.groupByDates ? <GroupedTodoListSkeleton/> : <SingleViewTodoListSkeleton/>
-    
+
     return !loading ? todoList : todoLoading
 }
 
@@ -135,12 +135,21 @@ function TodoStatus(props: { todo: Todo, className?: string }) {
 
     const completedCSS = `dark:border-green-200 dark:bg-green-500/30 dark:text-green-100
                                         border-green-400 bg-green-100 text-green-950`
+    const overDueCSS = `dark:border-yellow-200 dark:bg-yellow-500/30 dark:text-orange-100
+                                        border-yellow-400 bg-yellow-100 text-orange-950`
+
+    const isOverDue = new Date(props.todo.dueDate) < new Date()
 
     return (
         <div className={`bg-background absolute z-10 -top-4  rounded-xl ${props.className}`}>
             {props.todo.completed &&
                 <span className={`pr-2 pl-2 pb-1 pt-1 text-xs border font-bold rounded-xl ${completedCSS}`}>
                 Completed
+            </span>
+            }
+            {!props.todo.completed && isOverDue &&
+                <span className={`pr-2 pl-2 pb-1 pt-1 text-xs border font-bold rounded-xl ${overDueCSS}`}>
+                Overdue
             </span>
             }
         </div>)

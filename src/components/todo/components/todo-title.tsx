@@ -15,7 +15,7 @@ export function TodoTitle({todo}: TodoTitleProps) {
 
     const updateTitle = async () => {
         if (titleEditRef.current) {
-            const newTitle = titleEditRef.current.innerHTML.replace(/&nbsp;/g, " ").trim()
+            const newTitle = titleEditRef.current.textContent?.replace(/&nbsp;/g, " ").trim() ?? ""
             // TODO - Must handle other sanitization when I have time.
             await updateTodo(todo.id, newTitle, todo.dueDate, todo.completed)
             setEditing(false)
