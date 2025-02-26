@@ -45,44 +45,82 @@ export function AddEditTodoDialog({trigger, todo}: AddDialogProps) {
         }
     }, [todo?.dueDate, todo?.title]);
 
-    function isValidDate(date: Date | null | undefined) {
+    const isValidDate = (date: Date | null | undefined) => {
         return date instanceof Date && !isNaN(date as unknown as number);
     }
 
-    const submit = async () => {
-        setLoading(true);
+    const resetForm = () => {
+        setTitle('')
+        setDueDate(null)
+    }
+
+    const validate = () => {
         // Validate
-        let valid = false
+        let valid = true
         if (!dueDate || !isValidDate(dueDate) || dueDate < new Date()) {
             setDueDate(null)
-            setFormError({dueDateError: 'Due Date should be in the future'});
-        } else if (!title) {
             setFormError(prevState => {
-                return {...prevState, titleError: 'Title is required'}
+                return {
+                    ...prevState,
+                    dueDateError: 'Due Date should be in the future'
+                }
             });
             valid = false
         } else {
             setFormError(prevState => {
-                return {...prevState, dueDateError: '', titleError: ''}
+                return {
+                    ...prevState,
+                    dueDateError: ''
+                }
             });
-            valid = true
-        }
-        if (!valid) {
-            setLoading(false);
-            return;
         }
 
+        if (!title) {
+            setFormError(prevState => {
+                return {
+                    ...prevState,
+                    titleError: 'Title is required',
+                }
+            });
+            valid = false
+        } else {
+            setFormError(prevState => {
+                return {
+                    ...prevState,
+                    titleError: ''
+                }
+            });
+        }
+
+        return valid;
+    }
+
+    const submit = async () => {
+        setLoading(true);
+
+        if (!validate()) {
+            setLoading(false);
+            return;
+        } else {
+            //Reset the error
+            setFormError({
+                dueDateError: '', titleError: ''
+            });
+        }
+        
         // If todo exists, update it
         if (todo && dueDate) {
-            await updateTodo(todo.id, title, dueDate);
-            setOpen(false);
-            setLoading(false);
+            await updateTodo(todo.id, title, dueDate)
+            resetForm()
+            setOpen(false)
+            setLoading(false)
             return;
         }
 
         // If todo doesn't exist, add it
         if (dueDate) {
             await addTodo(title, dueDate);
+            resetForm()
             setOpen(false);
             setLoading(false);
         }
