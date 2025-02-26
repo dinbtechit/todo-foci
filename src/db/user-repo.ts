@@ -4,7 +4,7 @@ import {User} from "@/db/entities/user";
 
 export async function registerUser(email: string) {
     const userRepository = AppDataSource.getRepository(User);
-    const newUser = userRepository.create({email});
+    const newUser = userRepository.create({email: email.toLowerCase()});
     await userRepository.save(newUser);
     return newUser;
 }

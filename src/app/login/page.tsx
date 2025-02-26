@@ -26,7 +26,7 @@ export default function Login() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({email}),
+                    body: JSON.stringify({email: email.toLowerCase()}),
                 })
                 const data = await response.json()
                 if (data) {
@@ -50,9 +50,19 @@ export default function Login() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col justify-center items-start space-y-2">
+                    <small className="text-gray-500">One form to login & register!!</small>
+                    <span className="text-sm font-semibold text-gray-500">Accepted Characters:</span>
+                    <ul className="text-sm text-gray-500/90 list-disc">
+                        <ol> - Max 8 characters</ol>
+                        <ol> - Alpha-Numeric, special characters, even emoji's 🎉</ol>
+                        <ol> - lowercase only</ol>
+                    </ul>
+                    <hr className="w-full"/>
+
                     <span>Username:</span>
-                    <span className="text-sm text-gray-500/90">Pick any email or username to login</span>
                     <Input
+                        className="lowercase"
+                        maxLength={8}
                         placeholder="Enter username"
                         value={email}
                         onKeyDown={(e) => e.key === "Enter" && login()}
