@@ -5,12 +5,13 @@ import {Button} from "@/components/ui/button";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
 import {useAtom} from "jotai";
-import {isLoggedInState} from "@/components/user/state/user-state";
+import {isLoggedInState, userState} from "@/components/user/state/user-state";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
+    const [, setUser] = useAtom(userState)
     const [, setLoggedin] = useAtom(isLoggedInState)
 
     const login = async () => {
@@ -31,6 +32,10 @@ export default function Login() {
                 const data = await response.json()
                 if (data) {
                     setLoggedin(true);
+                    const res = await fetch('/api/user', {method: 'GET',})
+                    const user = await res.json()
+                    console.log(user);
+                    setUser(user)
                     router.push('/home');
                 }
             } catch (error) {

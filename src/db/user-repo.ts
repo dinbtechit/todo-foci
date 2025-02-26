@@ -4,7 +4,8 @@ import {User} from "@/db/entities/user";
 
 export async function registerUser(email: string) {
     const userRepository = AppDataSource.getRepository(User);
-    const newUser = userRepository.create({email: email.toLowerCase()});
+    email = email.toLowerCase()
+    const newUser = userRepository.create({email});
     await userRepository.save(newUser);
     return newUser;
 }
@@ -16,5 +17,5 @@ export async function getUserByEmail(email: string) {
 
 export async function getUserById(id: string) {
     const userRepository = AppDataSource.getRepository(User);
-    return userRepository.findOne({where: {id}});
+    return userRepository.findOneBy({id});
 }

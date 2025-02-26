@@ -1,43 +1,35 @@
 import type {NextApiRequest, NextApiResponse} from "next";
-import {connectDB} from "@/db/db";
 import {getUserByEmail, getUserById, registerUser} from "@/db/user-repo";
-import cookie from "cookie";
+import {connectDB} from "@/db/db";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
+    const cookieStore = req.cookies
+    console.log(cookieStore)
+    console.log(req.headers.cookie)
     try {
         switch (req.method) {
-            // Get User Profile
             case 'GET':
-                const cookies = cookie.parse(req.headers.cookie || '');
-                const userId = cookies?.user ?? '';
-                if (!userId) return res.status(400).json(null);
+                const userId = req.cookies.user
+                console.log('userId', userId);
+                if (!userId) return res.status(200).json(null);
                 const userRepo = await getUserById(userId);
                 return res.status(200).json(userRepo);
 
-            // Create a new todo
             case 'POST':
                 const {email} = req.body;
-                if (!email) return res.status(400).json({error: 'Title is required'});
-                let user = await getUserByEmail(email);
-                if (!user) {
-                    user = await registerUser(email);
+                if (!email) return res.status(400).json({error: 'Email is required'});
+                let userData = await getUserByEmail(email);
+                if (!userData) {
+                    userData = await registerUser(email);
                 }
-                res.setHeader(
-                    "Set-Cookie",
-                    cookie.serialize("user", user.id, {
-                        httpOnly: true,
-                        sameSite: "strict",
-                        path: "/",
-                        maxAge: 13600,
-                    })
-                );
-                return res.json({
-                    message: "Login successful"
-                });
 
-            // for all methods
+                if (!userData) return res.status(400).json({error: 'No User found'});
+                console.log(userData)
+                res.setHeader('Set-Cookie', `user=${userData.id}; Max-Age=3600; Path=/; HttpOnly; Secure; SameSite=Strict`);
+                return res.json({message: "Login successful"});
+
             default:
                 return res.status(405).json({error: 'Method Not Allowed'});
         }

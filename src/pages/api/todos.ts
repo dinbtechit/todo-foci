@@ -1,20 +1,17 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
 import {AppDataSource, connectDB} from "@/db/db";
 import {Todo} from "@/db/entities/todo";
-import {User} from "@/db/entities/user";
 import {SortBy} from "@/components/todo/model/todo-model";
 import {FindOptionsOrder, FindOptionsWhere} from "typeorm";
-import cookie from "cookie";
+import {User} from "@/db/entities/user";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
     const todoRepo = AppDataSource.getRepository(Todo);
     const {sortBy} = req.query
-    const cookies = cookie.parse(req.headers.cookie || '');
-    const userId = cookies?.user ?? '';
-    const user = {id: userId} as User;
 
+    const userId = req.cookies.user ?? ''
     try {
         switch (req.method) {
             // Get all todos
@@ -42,10 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 }
 
-                if (!user) return res.status(400).json({error: 'User is required'});
+                if (!userId) return res.status(400).json({error: 'User is required'});
 
                 const todos = await todoRepo.find({
-                    where: {user: {id: user.id}} as FindOptionsWhere<Todo>,
+                    where: {user: {id: userId}} as FindOptionsWhere<Todo>,
                     order: orderBy
                 });
                 return res.status(200).json(todos);
@@ -56,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (!title) return res.status(400).json({error: 'Title is required'});
                 if (!dueDate) return res.status(400).json({error: 'DueDate is required'});
                 const createdAt = new Date();
+                const user = {id: userId} as User
                 const newTodo = todoRepo.create({title, dueDate, user, createdAt});
                 await todoRepo.save(newTodo);
                 return res.status(201).json(newTodo);

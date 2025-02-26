@@ -6,6 +6,8 @@
 
 ![img_1.png](img_1.png)
 
+# Development
+
 ## Getting Started
 
 First, run the development server:

@@ -2,18 +2,16 @@ import type {NextApiRequest, NextApiResponse} from "next";
 import {connectDB} from "@/db/db";
 import {getGroupedTodos} from "@/db/todo-repo";
 import {SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
-import cookie from "cookie";
 import {User} from "@/db/entities/user";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
     const {sortGroupBy, sortBy} = req.query
-    const cookies = cookie.parse(req.headers.cookie || '');
     try {
         switch (req.method) {
             // Get grouped Todos
             case 'GET':
-                const userId = cookies?.user ?? '';
+                const userId = req.cookies.user
                 const user = {id: userId} as User;
                 const todos = await getGroupedTodos(user, {
                     sortGroupBy: sortGroupBy as SortGroupBy,

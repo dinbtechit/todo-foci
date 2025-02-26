@@ -3,11 +3,13 @@ import {DataSource} from 'typeorm';
 import {Todo} from "@/db/entities/todo";
 import {User} from "@/db/entities/user";
 
+const databaseHost = process.env.DATABASE_HOST ?? 'localhost';
+const databasePort = Number(process.env.DATABASE_PORT) ?? 5431;
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
-    host: 'localhost',
-    port: 5432,
+    host: databaseHost,
+    port: databasePort,
     username: 'postgres',
     password: 'postgres',
     database: 'todo',

@@ -23,10 +23,15 @@ export default function Header() {
 
     useEffect(() => {
         const loadUser = async () => {
-            const res = await fetch('/api/user', {method: 'GET',})
-            const user = await res.json()
-            console.log(user);
-            setUser(user)
+            try {
+                const res = await fetch('/api/user', {method: 'GET',})
+                const user = await res.json()
+                console.log(user);
+                setUser(user)
+            } catch (e: unknown) {
+                setUser(null)
+                console.log(e)
+            }
         }
         loadUser()
     }, [isLoggedIn]);
@@ -42,6 +47,7 @@ export default function Header() {
             .then(data => {
                 if (data) {
                     setLoggedin(false);
+                    setUser(null);
                     router.push('/login');
                 }
             })
