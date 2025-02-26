@@ -26,7 +26,7 @@ export async function searchGroupTodos(user: User, query: string, {groupByDates,
         // Combine full-text search and partial matching using OR
         queryBuilder.where(
             '(todo.title_tsvector @@ to_tsquery(:tsQuery) OR todo.title ILIKE :likeQuery)',
-            {tsQuery, likeQuery}
+            {tsQuery, likeQuery, userId: user.id}
         );
     }
     if (groupByDates) {
@@ -38,7 +38,9 @@ export async function searchGroupTodos(user: User, query: string, {groupByDates,
 async function prepareRegularQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<Todo>, {sortBy}: {
     sortBy: SortBy
 }) {
-    queryBuilder.where({user: {id: user.id}});
+
+    queryBuilder.andWhere(`todo.userId = :userId`, {userId: user.id});
+
     queryBuilder.addOrderBy('todo.dueDate', 'ASC').addOrderBy('todo.title', 'ASC')
     if (sortBy === 'date_desc') {
         queryBuilder.addOrderBy('todo.dueDate', 'DESC').addOrderBy('todo.title', 'ASC')
@@ -55,7 +57,7 @@ async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<
     sortBy: SortBy
 }) {
 
-    queryBuilder.where({user: {id: user.id}});
+    queryBuilder.andWhere(`todo.userId = :userId`, {userId: user.id});
 
     // Sort Group
     queryBuilder.orderBy("TO_CHAR(todo.dueDate, 'YYYY-MM-DD')", 'ASC')

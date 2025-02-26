@@ -17,11 +17,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method === 'PUT') {
         if (!id) return res.status(400).json({error: 'ID is required'});
+        if (!user) return res.status(404).json({error: 'User Not found'});
         const {title, dueDate, completed} = req.body;
         const todoToUpdate = await todoRepo.findOneBy({
-            where: {id, user}
+            id, user
         } as FindOptionsWhere<Todo>);
         if (!todoToUpdate) return res.status(404).json({error: 'Todo not found'});
+
         if (title) {
             todoToUpdate.title = title;
         }
@@ -41,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const todoToDelete = await todoRepo.findOneBy({
-            where: {id, user}
+            id, user
         } as FindOptionsWhere<Todo>);
         if (!todoToDelete) return res.status(404).json({error: 'Todo not found'});
         await todoRepo.remove(todoToDelete);

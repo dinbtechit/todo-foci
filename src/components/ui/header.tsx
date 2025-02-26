@@ -63,7 +63,7 @@ export default function Header() {
                 {user &&
                     <DropdownMenu>
                         <DropdownMenuTrigger
-                            className="inline-flex justify-between gap-2 rounded-lg shadow bg-black/95 hover:bg-gray-800/90 p-2 min-w-40">
+                            className="inline-flex justify-between gap-2 rounded-lg shadow text-white bg-black/95 hover:bg-gray-800/90 p-2 min-w-40">
                             <span className="inline-flex gap-2 capitalize"><User/> {user?.email}</span> <ChevronDown/>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>

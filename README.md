@@ -1,5 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [
-`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Foci To-Do app
+
+![login](login.png)
+
+![img.png](img.png)
 
 ## Getting Started
 
@@ -17,5 +20,19 @@ bun dev
 
 # Future Improvement
 
-1. Database indexing for Fuzzy match
+### Performance:
+
+1. Database indexing for full text search
 2. Event Driven approach to keep all tabs in Sync
+3. Limit the number of API calls - merge states on client-side. Right now, each action 2 API calls (one to perform the
+   action and other one to load the todo list).
+4. Impl `useOptimistic(...)` to improve the loading time.
+
+### Maintainability:
+
+1. Add more test cases
+2. Some Code Refactoring
+
+### Error Handling
+
+1. Improve error handling and UI/UX error messages
