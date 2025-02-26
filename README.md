@@ -1,9 +1,9 @@
 ## Foci To-Do app (Multi User)
 
-|                         |                              |                         |
-|-------------------------|------------------------------|-------------------------|
-| ![login](login.png)     | ![img_2.png](img_2.png)      | ![img_1.png](img_1.png) |
-| ![img_3.png](img_3.png) | ![img_1.png](docs/img_1.png) | ![img.png](img.png)     |
+|                              |                              |                                  |
+|------------------------------|------------------------------|----------------------------------|
+| ![login](login.png)          | ![img_2.png](docs/img_2.png) | ![img_1.png](docs/filter-wt.png) |
+| ![img_3.png](docs/img_3.png) | ![img_1.png](docs/img_1.png) | ![img.png](docs/filter.png)      |
 
 # Running Locally
 
@@ -21,7 +21,7 @@ Requires following to be installed on the machine.
 1. git clone ns-ceiling-fan monorepo
 
 ```bash
-git clone 
+git clone https://github.com/dinbtechit/todo-foci.git
 ```
 
 2. cd into the cloned repo
