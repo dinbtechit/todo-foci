@@ -11,7 +11,12 @@ import {
 
 import {filterTodoState, groupTodoByDateState, todoState} from "@/components/todo/state/todo-state";
 import {useAtom} from "jotai";
-import {useLoadGroupTodosByDate, useLoadTodos} from "@/components/todo/state/todo-state-hook";
+import {
+    useDeleteTodos,
+    useLoadGroupTodosByDate,
+    useLoadTodos,
+    useUpdateTodos
+} from "@/components/todo/state/todo-state-hook";
 import {TodoTitle} from "@/components/todo/components/todo-title";
 import {GroupTodosByDate, Todo} from "@/components/todo/model/todo-model";
 import {useEffect, useState} from "react";
@@ -53,7 +58,7 @@ export default function TodoList() {
 
 function SingleViewTodoList(prop: { todos: Todo[] }) {
     return (
-        <div className="flex flex-col gap-5 md:max-w-5xl w-full justify-start mt-8">
+        <div className="flex flex-col gap-5 md:max-w-5xl w-full justify-start mt-8 mb-8">
             {prop.todos.length === 0 &&
                 <div className="text-center text-gray-500 dark:text-gray-400">No todos found</div>}
             {prop.todos.map((todo, i) => (
@@ -217,35 +222,12 @@ function TodoCard(props: { todo: Todo, className?: string, headerClassName?: str
 
 function Action(props: { todo: Todo }) {
 
-    const [filterTodo,] = useAtom(filterTodoState)
-    const {loadTodos} = useLoadTodos()
-    const {loadTodosByDate} = useLoadGroupTodosByDate()
+    const {updateTodo} = useUpdateTodos()
+    const {deleteTodo} = useDeleteTodos()
 
-    const deleteTodo = async (id: string) => {
-        await fetch(`/api/todos/${id}`, {
-            method: "DELETE",
-            headers: {"Content-Type": "application/json"}
-        });
-        if (filterTodo.groupByDates) {
-            await loadTodosByDate()
-        } else {
-            await loadTodos()
-        }
-    }
 
     const completedToggle = async (id: string, completed: boolean) => {
-        await fetch(`/api/todos/${id}`, {
-            method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                completed: completed,
-            })
-        });
-        if (filterTodo.groupByDates) {
-            await loadTodosByDate()
-        } else {
-            await loadTodos()
-        }
+        await updateTodo({id: id, completed: completed})
     }
 
     return <DropdownMenu>

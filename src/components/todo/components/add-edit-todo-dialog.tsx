@@ -107,21 +107,26 @@ export function AddEditTodoDialog({trigger, todo}: AddDialogProps) {
                 dueDateError: '', titleError: ''
             });
         }
-        
-        // If todo exists, update it
-        if (todo && dueDate) {
-            await updateTodo(todo.id, title, dueDate)
-            resetForm()
-            setOpen(false)
-            setLoading(false)
-            return;
-        }
+        try {
+            // If todo exists, update it
+            if (todo && dueDate) {
+                await updateTodo({id: todo.id, title: title, dueDate: dueDate})
+                resetForm()
+                setOpen(false)
+                setLoading(false)
+                return;
+            }
 
-        // If todo doesn't exist, add it
-        if (dueDate) {
-            await addTodo(title, dueDate);
-            resetForm()
-            setOpen(false);
+            // If todo doesn't exist, add it
+            if (dueDate) {
+                await addTodo(title, dueDate);
+                resetForm()
+                setOpen(false);
+                setLoading(false);
+            }
+        } catch (err) {
+            // TODO display error on dialog
+            console.error(err);
             setLoading(false);
         }
     };

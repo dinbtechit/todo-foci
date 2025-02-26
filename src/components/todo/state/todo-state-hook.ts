@@ -60,14 +60,16 @@ export const useUpdateTodos = () => {
     const {loadTodos} = useLoadTodos();
     const {loadTodosByDate} = useLoadGroupTodosByDate();
     const [filterTodo,] = useAtom(filterTodoState)
-    const updateTodo = async (id: string, title?: string, dueDate?: Date, completed?: boolean) => {
-        const response = await fetch(`/api/todos/${id}`, {
+    const updateTodo = async (data: {
+        id: string, title?: string, dueDate?: Date, completed?: boolean
+    }) => {
+        const response = await fetch(`/api/todos/${data.id}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                title: title,
-                dueDate: dueDate,
-                completed: completed,
+                title: data.title,
+                dueDate: data.dueDate,
+                completed: data.completed,
             }),
         });
         if (!response.ok) throw new Error('Failed to update todos');
@@ -80,6 +82,25 @@ export const useUpdateTodos = () => {
 
     return {updateTodo};
 };
+
+export const useDeleteTodos = () => {
+    const [filterTodo,] = useAtom(filterTodoState)
+    const {loadTodos} = useLoadTodos()
+    const {loadTodosByDate} = useLoadGroupTodosByDate()
+
+    const deleteTodo = async (id: string) => {
+        await fetch(`/api/todos/${id}`, {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+        });
+        if (filterTodo.groupByDates) {
+            await loadTodosByDate()
+        } else {
+            await loadTodos()
+        }
+    }
+    return {deleteTodo};
+}
 
 
 export const useSearchTodos = () => {
