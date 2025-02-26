@@ -94,7 +94,7 @@ function GroupedTodoList(props: { todos: GroupTodosByDate[] }) {
 
     return (
         props.todos.map((group, i) => (
-            <div key={i} className="flex flex-row w-full gap-0 mt-4 mb-8">
+            <div key={i} className="flex flex-row w-full gap-0 mt-4">
                 <div
                     className="flex flex-col justify-start w-[8.0em] h-full shadow rounded-l-2xl bg-gray-100 dark:bg-black/30 items-center pl-2 pt-1 md:pt-2 space-y-0">
                                 <span
@@ -117,7 +117,8 @@ function GroupedTodoList(props: { todos: GroupTodosByDate[] }) {
                     </div>
                 </div>
             </div>
-        )))
+        ))
+    )
 }
 
 function GroupedTodoListSkeleton() {
