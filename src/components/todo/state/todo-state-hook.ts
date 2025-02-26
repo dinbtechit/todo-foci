@@ -28,6 +28,34 @@ export const useLoadGroupTodosByDate = () => {
     return {loadTodosByDate};
 };
 
+export const useAddTodos = () => {
+    const [filterTodo,] = useAtom(filterTodoState)
+    const {loadTodos} = useLoadTodos();
+    const {loadTodosByDate} = useLoadGroupTodosByDate();
+    const addTodo = async (title: string, dueDate: Date) => {
+        const response = await fetch('/api/todos', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                title: title,
+                dueDate: dueDate
+            }),
+        });
+        if (!response.ok) {
+            console.error('Error creating todo');
+            return;
+        }
+        if (filterTodo.groupByDates) {
+            await loadTodosByDate();
+        } else {
+            await loadTodos();
+        }
+    }
+    return {addTodo};
+}
+
 export const useUpdateTodos = () => {
     const {loadTodos} = useLoadTodos();
     const {loadTodosByDate} = useLoadGroupTodosByDate();
@@ -67,4 +95,5 @@ export const useSearchTodos = () => {
         }
     }
     return {searchTodos: search};
-};
+}
+

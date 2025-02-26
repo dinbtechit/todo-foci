@@ -17,6 +17,8 @@ import {GroupTodosByDate, Todo} from "@/components/todo/model/todo-model";
 import {useEffect, useState} from "react";
 import {cn} from "@/lib/utils";
 import {Skeleton} from "@/components/ui/skeleton";
+import {AddTodoDialog} from "@/components/todo/components/add-todo-dialog";
+import {Button} from "@/components/ui/button";
 
 
 export default function TodoList() {
@@ -52,6 +54,8 @@ export default function TodoList() {
 function SingleViewTodoList(prop: { todos: Todo[] }) {
     return (
         <div className="flex flex-col gap-5 md:max-w-5xl w-full justify-start mt-8">
+            {prop.todos.length === 0 &&
+                <div className="text-center text-gray-500 dark:text-gray-400">No todos found</div>}
             {prop.todos.map((todo, i) => (
                 <div key={i} className="w-full relative mt-4">
                     <TodoStatus todo={todo}/>
@@ -78,32 +82,37 @@ function GroupedTodoList(props: { todos: GroupTodosByDate[] }) {
         const [year, month, day] = dateString.split('-');
         return new Date(Number(year), Number(month) - 1, Number(day));
     };
-    return props.todos.map((group, i) => (
-        <div key={i} className="flex flex-row w-full gap-0 mt-4">
-            <div
-                className="flex flex-col justify-start w-[8.0em] h-full shadow rounded-l-2xl bg-gray-100 dark:bg-black/30 items-center pl-2 pt-1 md:pt-2 space-y-0">
+
+    if (props.todos.length === 0) return (
+        <div className="text-center text-gray-500 dark:text-gray-400">No todos found</div>
+    )
+
+    return (
+        props.todos.map((group, i) => (
+            <div key={i} className="flex flex-row w-full gap-0 mt-4">
+                <div
+                    className="flex flex-col justify-start w-[8.0em] h-full shadow rounded-l-2xl bg-gray-100 dark:bg-black/30 items-center pl-2 pt-1 md:pt-2 space-y-0">
                                 <span
                                     className="text-red-500 text-lg">{Intl.DateTimeFormat('en-US', {month: 'short'}).format(formatDate(group.date))}</span>
-                <span
-                    className="text-4xl font-semibold">{Intl.DateTimeFormat('en-CA', {day: '2-digit'}).format(formatDate(group.date))}</span>
-                <span
-                    className="text-sm mt-2 text-gray-400">{Intl.DateTimeFormat('en-CA', {year: 'numeric'}).format(new Date(group.date))}</span>
-            </div>
-            <div className="w-full  border-l-4 border-t border-b border-r rounded-r-2xl pr-4
+                    <span
+                        className="text-4xl font-semibold">{Intl.DateTimeFormat('en-CA', {day: '2-digit'}).format(formatDate(group.date))}</span>
+                    <span
+                        className="text-sm mt-2 text-gray-400">{Intl.DateTimeFormat('en-CA', {year: 'numeric'}).format(new Date(group.date))}</span>
+                </div>
+                <div className="w-full  border-l-4 border-t border-b border-r rounded-r-2xl pr-4
                              bg-gray-200 dark:bg-black/10 dark:border-black/20">
-                <div
-                    className="flex flex-1 flex-col w-full gap-5 mt-4 mb-4 justify-start p-1 md:p-2 md:pl-6 md:pt-1">
-                    {group.todos.map((todo, i) => (
-                        <div key={i} className="w-full relative">
-                            <TodoStatus todo={todo} className="-top-2 "/>
-                            <TodoCard todo={todo} headerClassName="p-5"/>
-                        </div>
-                    ))}
+                    <div
+                        className="flex flex-1 flex-col w-full gap-5 mt-4 mb-4 justify-start p-1 md:p-2 md:pl-6 md:pt-1">
+                        {group.todos.map((todo, i) => (
+                            <div key={i} className="w-full relative">
+                                <TodoStatus todo={todo} className="-top-2 "/>
+                                <TodoCard todo={todo} headerClassName="p-5"/>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
-        </div>
-
-    ))
+        )))
 }
 
 function GroupedTodoListSkeleton() {
@@ -157,6 +166,7 @@ function TodoStatus(props: { todo: Todo, className?: string }) {
 
 function TodoCard(props: { todo: Todo, className?: string, headerClassName?: string }) {
     const [filterTodo,] = useAtom(filterTodoState)
+    const [selectedTodo, setSelectedTodo] = useState<Todo>(props.todo)
 
     return <Card className={cn(props.todo.completed ? "opacity-40 -z-10" : "", props.className)}>
         <CardHeader className={`flex flex-row justify-center items-center p-0 pr-5 ${props.headerClassName}`}>
@@ -179,12 +189,19 @@ function TodoCard(props: { todo: Todo, className?: string, headerClassName?: str
                         <TodoTitle todo={props.todo}/>
                         <CardDescription>
                             <div className="inline-flex items-center flex-1">
-                                <AlarmClock/> <span className="ml-2">
-                                                {Intl.DateTimeFormat("en-CA", {
-                                                    timeStyle: "short",
-                                                    hour12: true,
-                                                }).format(new Date(props.todo.dueDate))}
-                                            </span>
+
+                                <AddTodoDialog todo={selectedTodo} trigger={
+                                    <Button variant="secondary" className="p-2"
+                                            onClick={() => setSelectedTodo(props.todo)}>
+                                        <AlarmClock/>
+                                        <span>
+                                        {Intl.DateTimeFormat("en-CA", {
+                                            timeStyle: "short",
+                                            hour12: true,
+                                        }).format(new Date(props.todo.dueDate))}
+                                        </span>
+                                    </Button>
+                                }/>
                             </div>
                         </CardDescription>
                     </div>
