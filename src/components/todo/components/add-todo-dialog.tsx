@@ -1,6 +1,6 @@
 "use client";
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useLoadGroupTodosByDate, useLoadTodos} from "@/components/todo/state/todo-state-hook";
 import {
@@ -15,11 +15,13 @@ import {
 import {Button} from "@/components/ui/button";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import {DateTimePicker} from "@/components/ui/datetime-picker";
+import {FormDateTimePicker} from "@/components/ui/datetime-picker";
 import {Form, FormField, FormMessage} from "@/components/ui/form";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Plus} from "lucide-react";
+import {useAtom} from "jotai";
+import {filterTodoState} from "@/components/todo/state/todo-state";
 
 const schema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -34,6 +36,7 @@ export function AddTodoDialog() {
     const [open, setOpen] = useState(false);
     const {loadTodos} = useLoadTodos();
     const {loadTodosByDate} = useLoadGroupTodosByDate()
+    const [filterTodo,] = useAtom(filterTodoState)
 
     const form = useForm<FormData>({
         defaultValues: {
@@ -42,6 +45,10 @@ export function AddTodoDialog() {
         },
         resolver: zodResolver(schema),
     });
+
+    useEffect(() => {
+        form.reset()
+    }, []);
 
 
     const addTodo = async (data: FormData) => {
@@ -59,12 +66,13 @@ export function AddTodoDialog() {
             console.error('Error creating todo');
             return;
         }
-        const newData = await response.json();
-        console.log('Todo created:', newData);
-        loadTodos();
-        loadTodosByDate();
+        if (filterTodo.groupByDates) {
+            await loadTodosByDate();
+        } else {
+            await loadTodos();
+        }
+        form.reset()
         setOpen(false);
-        form.reset();
     };
 
     return (
@@ -105,26 +113,7 @@ export function AddTodoDialog() {
                                 </div>
                             )}
                         />
-
-                        <FormField
-                            control={form.control}
-                            name="dueDate"
-                            render={({field}) => (
-                                <div className="grid grid-cols-3 items-center gap-4">
-                                    <Label htmlFor="duedate" className="text-left">
-                                        Due Date
-                                    </Label>
-                                    <div className="col-span-3">
-                                        <DateTimePicker
-                                            {...field}
-                                            onChange={(selectedDate) => field.onChange(selectedDate)}
-                                        />
-                                        <FormMessage className="mt-2"/>
-                                    </div>
-                                </div>
-                            )}
-                        />
-
+                        <FormDateTimePicker form={form}/>
                         <DialogFooter>
                             <Button type="submit">Create</Button>
                         </DialogFooter>
