@@ -45,13 +45,17 @@ docker-compose up -d --build app
  ✔ Container app                 Started       
 ```
 
-5. Open browser preferably chrome (NSFan is not supported on IE)
+5. Open browser
 
 > **Note:** website is accessible only on localhost.
 
 ```
-http://localhost:8080
+http://localhost:3000
 ```
+
+6. Browser
+
+![img.png](docs/app-running.png)
 
 # Development
 
@@ -71,11 +75,6 @@ bun dev
 
 # Future Improvement
 
-### Authentication
-
-1. The current authentication is handled via cookies on the server-side, which works well for demo purposes but isn't
-   ideal for production. Implement OAuth and social logins for Authentication.
-
 ### Performance:
 
 1. Database indexing for full text search
@@ -92,3 +91,11 @@ bun dev
 ### Error Handling
 
 1. Improve error handling and UI/UX error messages
+
+### Authentication
+
+1. The current authentication is handled via cookies on the server-side, which works well for demo purposes but isn't
+   ideal for production. Implement OAuth and social logins for Authentication.
+
+----
+Thank you for the opportunity 
