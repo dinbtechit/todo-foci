@@ -1,10 +1,57 @@
-## Foci To-Do app
+## Foci To-Do app (Multi User)
 
-![login](login.png)
+|                         |                              |                         |
+|-------------------------|------------------------------|-------------------------|
+| ![login](login.png)     | ![img_2.png](img_2.png)      | ![img_1.png](img_1.png) |
+| ![img_3.png](img_3.png) | ![img_1.png](docs/img_1.png) | ![img.png](img.png)     |
 
-![img_2.png](img_2.png)
+# Running Locally
 
-![img_1.png](img_1.png)
+> Please note the Following instructions are for a linux distro.
+> Instructions on other operating system might vary.
+
+### Prerequisites:
+
+Requires following to be installed on the machine.
+
+1. git (latest)
+2. docker - version 20.10.16 or higher
+3. docker-compose - version 1.29.2 or higher
+
+1. git clone ns-ceiling-fan monorepo
+
+```bash
+git clone 
+```
+
+2. cd into the cloned repo
+
+```bash
+cd todo-foci
+```
+
+4. Build Images and bring up the application.
+
+```bash
+docker-compose up -d --build app
+```
+
+**output:**
+
+```
+[+] Running 3/3
+ ✔ app                           Built                                                                                                                                                                                           0.0s 
+ ✔ Container postgres_container  Running                                                                                                                                                                                         0.0s 
+ ✔ Container app                 Started       
+```
+
+5. Open browser preferably chrome (NSFan is not supported on IE)
+
+> **Note:** website is accessible only on localhost.
+
+```
+http://localhost:8080
+```
 
 # Development
 

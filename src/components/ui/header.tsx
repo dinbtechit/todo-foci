@@ -25,13 +25,17 @@ export default function Header() {
         const loadUser = async () => {
             try {
                 const res = await fetch('/api/user', {method: 'GET',})
-                const user = await res.json()
-                console.log(user);
-                setUser(user)
+                const userData = await res.json()
+                if (!userData) {
+                    router.push('/login');
+                }
+                setUser(userData)
             } catch (e: unknown) {
                 setUser(null)
+                router.push('/login');
                 console.log(e)
             }
+
         }
         loadUser()
     }, [isLoggedIn]);

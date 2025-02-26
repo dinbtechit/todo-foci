@@ -1,7 +1,8 @@
-import {BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {User} from './user';
 
 @Entity()
+@Index("IDX_TITLE", ["title"])
 export class Todo {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -22,20 +23,4 @@ export class Todo {
     @JoinColumn({name: 'userId'})
     user: User;
 
-    @Column({
-        type: 'tsvector',
-        select: false,
-    })
-    title_tsvector: string;
-
-
-    @BeforeInsert()
-    @BeforeUpdate()
-    updateTitleTsvector() {
-        this.title_tsvector = this.toTsvector(this.title);
-    }
-
-    private toTsvector(title: string): string {
-        return `to_tsvector('english', '${title}')`;
-    }
 }

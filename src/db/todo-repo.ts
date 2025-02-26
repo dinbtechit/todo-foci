@@ -18,17 +18,15 @@ export async function searchGroupTodos(user: User, query: string, {groupByDates,
     const todoRepository = AppDataSource.getRepository(Todo);
     const normalizedQuery = query.replace(/'/g, '');
     // Sanitize words
-    const words = normalizedQuery.split(/\s+/).filter(word => word.length > 0);
-    const tsQuery = words.map(word => `${word}:*`).join(' & ');
+    //const words = normalizedQuery.split(/\s+/).filter(word => word.length > 0);
+    //const tsQuery = words.map(word => `${word}:*`).join(' & ');
     const likeQuery = `%${normalizedQuery}%`;
     const queryBuilder = todoRepository.createQueryBuilder('todo');
-    if (words.length > 0) {
+    /*if (words.length > 0) {
         // Combine full-text search and partial matching using OR
-        queryBuilder.where(
-            '(todo.title_tsvector @@ to_tsquery(:tsQuery) OR todo.title ILIKE :likeQuery)',
-            {tsQuery, likeQuery, userId: user.id}
-        );
-    }
+
+    }*/
+    queryBuilder.where('todo.title ILIKE :likeQuery', {likeQuery});
     if (groupByDates) {
         return prepareQueryBuilder(user, queryBuilder, {sortGroupBy, sortBy});
     }
