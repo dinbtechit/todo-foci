@@ -1,9 +1,9 @@
 ## Foci To-Do app (Multi User)
 
-|                            |                              |                                  |
-|----------------------------|------------------------------|----------------------------------|
-| ![img.png](login.png)      | ![img_2.png](docs/img_2.png) | ![img_1.png](docs/filter-wt.png) |
-| ![img.png](login-dark.png) | ![img_1.png](docs/img_1.png) | ![img.png](docs/filter.png)      |
+|                                 |                                     |                                   |
+|---------------------------------|-------------------------------------|-----------------------------------|
+| ![img.png](docs/login.png)      | ![img.png](docs/list-todo.png)      | ![img.png](docs/filter-light.png) |
+| ![img.png](docs/login-dark.png) | ![img.png](docs/list-todo-dark.png) | ![img.png](docs/filter-dark.png)  |
 
 # Requirements
 
