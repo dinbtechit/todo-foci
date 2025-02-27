@@ -14,15 +14,16 @@
     -  [x] Description
     -  [X] Due Date
 - [X] Functional
-    - [X] Create, Read, Update, Delete, Add the ability to mark.
+    - [X] Create, Read, Update, Delete, Add the ability to mark complete.
     - [X] Optional - Sorting todo items by due date or title
     - [X] Optional - Filtering Options  (e.g., show only complete, or in-progress items).
     - [X] Additional
+        - [X] Add the ability to mark undo complete.
         - [X] Grouping TODO by dueDate and sorting the group
         - [X] Dark and Light Mode
         - [X] Multi user support
         - [X] Advance Search functionality
-- [X] Shipping - Docker-Compose Ready - To prop it up in local environment and try it out
+- [X] Deployment - Docker-Compose - To spin it up locally and test it out.
 
 # Running Locally
 
