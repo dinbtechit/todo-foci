@@ -11,6 +11,8 @@ services:
       - "5431:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
   app:
     container_name: app
     build: .
@@ -22,7 +24,9 @@ services:
       DATABASE_PORT: postgres
     depends_on:
       - postgres
-
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 volumes:
   pg_data:
 
