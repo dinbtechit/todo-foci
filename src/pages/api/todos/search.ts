@@ -6,8 +6,9 @@ import {User} from "@/db/entities/user";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
-    const {showOnly, sortGroupBy, sortBy} = req.query
+    const {groupByDates, showOnly, sortGroupBy, sortBy} = req.query
     const filterByTodo = {
+        groupByDates: groupByDates === "true",
         showOnly,
         sortGroupBy: sortGroupBy as SortGroupBy,
         sortBy: sortBy as SortBy
@@ -19,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Get grouped Todos
             case 'POST':
                 const {searchText} = req.body;
-                console.log('searching...' + req.body);
+                console.log('searching...', JSON.stringify(req.body));
                 const user = {id: userId} as User;
                 const todos = await searchGroupTodos(user, searchText ?? '', filterByTodo);
                 return res.status(200).json(todos);

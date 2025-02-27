@@ -101,7 +101,7 @@ function GroupedTodoList(props: { todos: GroupTodosByDate[] }) {
                     <span
                         className="text-4xl font-semibold">{Intl.DateTimeFormat('en-CA', {day: '2-digit'}).format(formatDate(group.date))}</span>
                     <span
-                        className="text-sm mt-2 text-gray-400">{Intl.DateTimeFormat('en-CA', {year: 'numeric'}).format(new Date(group.date))}</span>
+                        className="text-sm mt-2 text-gray-400">{Intl.DateTimeFormat('en-CA', {year: 'numeric'}).format(formatDate(group.date))}</span>
                 </div>
                 <div className="w-full  border-l-4 border-t border-b border-r rounded-r-2xl pr-4
                              bg-gray-200 dark:bg-black/10 dark:border-black/20">
