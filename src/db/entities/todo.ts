@@ -1,7 +1,7 @@
 import {Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {User} from './user';
 
-@Entity()
+@Entity("todo")
 @Index("IDX_TITLE", ["title"])
 export class Todo {
     @PrimaryGeneratedColumn('uuid')
