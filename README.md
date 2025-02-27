@@ -74,7 +74,7 @@ http://localhost:3000
 
 6. Browser
 
-![img.png](docs/app-running.png)
+![img.png](docs/running-app.png)
 
 # Development
 
@@ -104,8 +104,9 @@ bun dev
 
 1. Database indexing for full text search
 2. Event Driven approach to keep all tabs in Sync
-3. Limit the number of API calls - merge states on client-side. Right now, each action 2 API calls (one to perform the
-   action and other one to load the todo list).
+3. Limit the number of API calls - merge states on client-side. Right now, each CRUD operation performs 2 API calls (one
+   for the operation
+   and other one to load the todo list).
 4. Impl `useOptimistic(...)` to improve the loading time.
 
 ### Maintainability:
@@ -123,4 +124,4 @@ bun dev
    ideal for production. Implement OAuth and social logins for Authentication.
 
 ----
-Thank you for the opportunity 
+Thank you for the opportunity 🙏
