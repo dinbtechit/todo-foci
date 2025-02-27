@@ -34,7 +34,7 @@ export const useAddTodos = () => {
     const [filterTodo,] = useAtom(filterTodoState)
     const {loadTodos} = useLoadTodos();
     const {loadTodosByDate} = useLoadGroupTodosByDate();
-    const addTodo = async (title: string, desc: string, dueDate: Date) => {
+    const addTodo = async (title: string, description: string, dueDate: Date) => {
         const response = await fetch('/api/todos', {
             method: 'POST',
             headers: {
@@ -42,7 +42,7 @@ export const useAddTodos = () => {
             },
             body: JSON.stringify({
                 title: title,
-                desc: desc,
+                description: description,
                 dueDate: dueDate
             }),
         });
