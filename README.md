@@ -76,6 +76,12 @@ http://localhost:3000
 
 ![img.png](docs/running-app.png)
 
+7. To remove and clean all images
+
+```bash
+docker-compose down -v --remove-orphans --rmi all
+```
+
 # Development
 
 ## Getting Started
