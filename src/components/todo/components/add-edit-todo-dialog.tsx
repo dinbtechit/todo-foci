@@ -213,7 +213,7 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
 
                 <div className="grid grid-cols-3 items-start gap-4">
                     <Label htmlFor="title" className="text-left">
-                        Title
+                        Due Date
                     </Label>
                     <div className="col-span-3">
                         <Input
