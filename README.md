@@ -38,6 +38,7 @@ Requires following to be installed on the machine.
 2. docker - version 20.10.16 or higher
 3. docker-compose - version 1.29.2 or higher
 
+### Step-by-step instruction
 
 1. git clone repo
 
