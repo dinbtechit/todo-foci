@@ -16,7 +16,7 @@ export default function Login() {
 
     const login = async () => {
         if (!email) {
-            setError("Please enter your email");
+            setError("Please enter your username");
         } else {
             setError("");
 
@@ -55,7 +55,7 @@ export default function Login() {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col justify-center items-start space-y-2">
-                    <small className="text-gray-500">One form to login & register!!</small>
+                    <small className="text-gray-500">Please enter your username or a new username to register!!</small>
                     <span className="text-sm font-semibold text-gray-500">Accepted Characters:</span>
                     <ul className="text-sm text-gray-500/90 list-disc">
                         <ol> - Max 8 characters</ol>
