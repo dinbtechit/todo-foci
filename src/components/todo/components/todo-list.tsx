@@ -95,7 +95,7 @@ function GroupedTodoList(props: { todos: GroupTodosByDate[] }) {
         props.todos.map((group, i) => (
             <div key={i} className="flex flex-row w-full gap-0 mt-4">
                 <div
-                    className="flex flex-col justify-start w-[8.0em] h-full shadow rounded-l-2xl bg-gray-100 dark:bg-black/30 items-center pl-2 pt-1 md:pt-2 space-y-0">
+                    className="flex flex-col justify-start w-[8.0em] h-full shadow rounded-l-2xl border border-gray-500/20 border-r-0 bg-gray-100 dark:bg-black/30 items-center pl-2 pt-1 md:pt-2 space-y-0">
                                 <span
                                     className="text-red-500 text-lg">{Intl.DateTimeFormat('en-US', {month: 'short'}).format(formatDate(group.date))}</span>
                     <span
@@ -103,8 +103,8 @@ function GroupedTodoList(props: { todos: GroupTodosByDate[] }) {
                     <span
                         className="text-sm mt-2 text-gray-400">{Intl.DateTimeFormat('en-CA', {year: 'numeric'}).format(formatDate(group.date))}</span>
                 </div>
-                <div className="w-full  border-l-4 border-t border-b border-r rounded-r-2xl pr-4
-                             bg-gray-200 dark:bg-black/10 dark:border-black/20">
+                <div className="w-full  border-l-4  rounded-r-2xl pr-4
+                             bg-gray-200 dark:bg-gray-400/5">
                     <div
                         className="flex flex-1 flex-col w-full gap-5 mt-4 mb-4 justify-start p-1 md:p-2 md:pl-6 md:pt-1">
                         {group.todos.map((todo, i) => (
@@ -171,7 +171,8 @@ function TodoStatus(props: { todo: Todo, className?: string }) {
 
 function TodoCard(props: { todo: Todo, className?: string, headerClassName?: string }) {
     const [filterTodo,] = useAtom(filterTodoState)
-    return <Card className={cn(props.todo.completed ? "opacity-40 -z-10" : "", props.className)}>
+    return <Card
+        className={cn("dark:bg-black/30 shadow border border-gray-500/70", props.todo.completed ? "opacity-40 -z-10" : "", props.className)}>
         <CardHeader className={`flex flex-row justify-center items-center p-0 pr-5 ${props.headerClassName}`}>
             <div className="flex-1">
                 <CardTitle className="inline-flex justify-center items-center">
@@ -229,7 +230,7 @@ function Action(props: { todo: Todo }) {
 
     return (
         <><AddEditTodoDialog todo={props.todo} open={isOpen} onCloseDialog={onDialogClose}/><DropdownMenu>
-            <DropdownMenuTrigger className="p-2 rounded-xl hover:bg-gray-800"
+            <DropdownMenuTrigger className="p-2 rounded-xl dark:hover:bg-gray-800 hover:bg-gray-200"
             ><Ellipsis/></DropdownMenuTrigger>
             <DropdownMenuContent>
                 {props.todo.completed ?
