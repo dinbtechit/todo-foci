@@ -218,13 +218,17 @@ function Action(props: { todo: Todo }) {
     const {deleteTodo} = useDeleteTodos()
     const [isOpen, setIsOpen] = useState(false)
 
+    const onDialogClose = (input: boolean) => {
+        setIsOpen(input)
+    }
+
 
     const completedToggle = async (id: string, completed: boolean) => {
         await updateTodo({id: id, completed: completed})
     }
 
     return (
-        <><AddEditTodoDialog todo={props.todo} open={isOpen} setOpen={setIsOpen}/><DropdownMenu>
+        <><AddEditTodoDialog todo={props.todo} open={isOpen} onCloseDialog={onDialogClose}/><DropdownMenu>
             <DropdownMenuTrigger className="p-2 rounded-xl hover:bg-gray-800"
             ><Ellipsis/></DropdownMenuTrigger>
             <DropdownMenuContent>

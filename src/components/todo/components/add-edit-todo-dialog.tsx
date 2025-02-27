@@ -22,11 +22,11 @@ import {Textarea} from "@/components/ui/textarea";
 interface AddDialogProps {
     trigger?: React.ReactNode,
     open?: boolean,
-    setOpen?: React.Dispatch<React.SetStateAction<boolean>>
+    onCloseDialog: (isOpen: boolean) => void
     todo?: Todo
 }
 
-export function AddEditTodoDialog({trigger, open, setOpen, todo}: AddDialogProps) {
+export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialogProps) {
     /*  const [open, setOpen] = useState(false);*/
     const [loading, setLoading] = useState(false);
     const {updateTodo} = useUpdateTodos();
@@ -52,9 +52,7 @@ export function AddEditTodoDialog({trigger, open, setOpen, todo}: AddDialogProps
             setDueDate(new Date(todo?.dueDate));
         }
         if (open) {
-            if (setOpen) {
-                setOpen(true);
-            }
+            onCloseDialog(true);
         }
     }, [todo?.dueDate, todo?.description, todo?.title]);
 
@@ -126,9 +124,7 @@ export function AddEditTodoDialog({trigger, open, setOpen, todo}: AddDialogProps
                 console.log(desc)
                 await updateTodo({id: todo.id, title: title, description: desc, dueDate: dueDate})
                 resetForm()
-                if (setOpen) {
-                    setOpen(false)
-                }
+                onCloseDialog(false)
                 setLoading(false)
                 return;
             }
@@ -137,9 +133,7 @@ export function AddEditTodoDialog({trigger, open, setOpen, todo}: AddDialogProps
             if (dueDate) {
                 await addTodo(title, desc, dueDate);
                 resetForm()
-                if (setOpen) {
-                    setOpen(false);
-                }
+                onCloseDialog(false)
                 setLoading(false);
             }
         } catch (err) {
@@ -161,7 +155,7 @@ export function AddEditTodoDialog({trigger, open, setOpen, todo}: AddDialogProps
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={onCloseDialog}>
             <DialogTrigger asChild>
                 {trigger ?? open ?? <Button className="w-320 rounded-2xl text-white font-semibold text-lg">
                     <Plus className="scale-150 text-white"/> Create Todo
