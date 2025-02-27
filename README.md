@@ -38,7 +38,8 @@ Requires following to be installed on the machine.
 2. docker - version 20.10.16 or higher
 3. docker-compose - version 1.29.2 or higher
 
-1. git clone ns-ceiling-fan monorepo
+
+1. git clone repo
 
 ```bash
 git clone https://github.com/dinbtechit/todo-foci.git
