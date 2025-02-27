@@ -17,33 +17,46 @@ import {Input} from "@/components/ui/input";
 import {Plus} from "lucide-react";
 import {Todo} from "../model/todo-model";
 import Loading from "@/components/ui/loading";
+import {Textarea} from "@/components/ui/textarea";
 
 interface AddDialogProps {
     trigger?: React.ReactNode,
+    open?: boolean,
+    setOpen?: React.Dispatch<React.SetStateAction<boolean>>
     todo?: Todo
 }
 
-export function AddEditTodoDialog({trigger, todo}: AddDialogProps) {
-    const [open, setOpen] = useState(false);
+export function AddEditTodoDialog({trigger, open, setOpen, todo}: AddDialogProps) {
+    /*  const [open, setOpen] = useState(false);*/
     const [loading, setLoading] = useState(false);
     const {updateTodo} = useUpdateTodos();
     const {addTodo} = useAddTodos();
     const [title, setTitle] = useState('')
+    const [desc, setDesc] = useState('')
     const [dueDate, setDueDate] = useState<Date | null>(null)
-    const [formError, setFormError] = useState<{ titleError?: string, dueDateError?: string } | null>(null);
+    const [formError, setFormError] = useState<{
+        titleError?: string,
+        descError?: string,
+        dueDateError?: string
+    } | null>(null);
 
 
     useEffect(() => {
         if (todo?.title) {
             setTitle(todo.title);
         }
+        if (todo?.description) {
+            setDesc(todo.description);
+        }
         if (todo?.dueDate) {
             setDueDate(new Date(todo?.dueDate));
         }
         if (open) {
-            setOpen(true);
+            if (setOpen) {
+                setOpen(true);
+            }
         }
-    }, [todo?.dueDate, todo?.title]);
+    }, [todo?.dueDate, todo?.description, todo?.title]);
 
     const isValidDate = (date: Date | null | undefined) => {
         return date instanceof Date && !isNaN(date as unknown as number);
@@ -110,18 +123,23 @@ export function AddEditTodoDialog({trigger, todo}: AddDialogProps) {
         try {
             // If todo exists, update it
             if (todo && dueDate) {
-                await updateTodo({id: todo.id, title: title, dueDate: dueDate})
+                console.log(desc)
+                await updateTodo({id: todo.id, title: title, description: desc, dueDate: dueDate})
                 resetForm()
-                setOpen(false)
+                if (setOpen) {
+                    setOpen(false)
+                }
                 setLoading(false)
                 return;
             }
 
             // If todo doesn't exist, add it
             if (dueDate) {
-                await addTodo(title, dueDate);
+                await addTodo(title, desc, dueDate);
                 resetForm()
-                setOpen(false);
+                if (setOpen) {
+                    setOpen(false);
+                }
                 setLoading(false);
             }
         } catch (err) {
@@ -145,7 +163,7 @@ export function AddEditTodoDialog({trigger, todo}: AddDialogProps) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                {trigger ?? <Button className="w-320 rounded-2xl text-white font-semibold text-lg">
+                {trigger ?? open ?? <Button className="w-320 rounded-2xl text-white font-semibold text-lg">
                     <Plus className="scale-150 text-white"/> Create Todo
                 </Button>}
             </DialogTrigger>
@@ -167,6 +185,7 @@ export function AddEditTodoDialog({trigger, todo}: AddDialogProps) {
                     </Label>
                     <div className="col-span-3">
                         <Input
+                            maxLength={50}
                             id="title"
                             value={title}
                             onInput={(e) => setTitle(e.currentTarget.value)}
@@ -174,6 +193,24 @@ export function AddEditTodoDialog({trigger, todo}: AddDialogProps) {
                         />
                         {formError?.titleError &&
                             <div className="text-sm text-red-500 mt-2">{formError?.titleError}</div>}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-3 items-start gap-4">
+                    <Label htmlFor="desc" className="text-left">
+                        Description
+                    </Label>
+                    <div className="col-span-3">
+                        <Textarea id="desc"
+                                  maxLength={200}
+                                  rows={5}
+                                  value={desc}
+                                  className="w-full"
+                                  onInput={(e) => setDesc(e.currentTarget.value)}
+                                  placeholder="Type your message here."/>
+
+                        {formError?.descError &&
+                            <div className="text-sm text-red-500 mt-2">{formError?.descError}</div>}
                     </div>
                 </div>
 

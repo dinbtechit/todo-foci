@@ -14,22 +14,27 @@ import {
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import {filterTodoState} from "@/components/todo/state/todo-state";
-import {SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
+import {ShowOnly, SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
 
 export default function SortTodo() {
     const [groupByDates, setGroupByDates] = useState(true)
     const [sortBy, setSortBy] = useState<SortBy | string>('date_asc')
     const [sortGroupBy, setSortGroupBy] = useState<SortGroupBy | string>('asc')
     const [, setFilterTodo] = useAtom(filterTodoState)
+    const [showOnly, setShowOnly] = useState<ShowOnly | string>('all')
 
     useEffect(() => {
+        const showOnlyLocalStore = window.localStorage.getItem("showOnly") ?? 'all';
         const groupByDatesLocalStore = (window.localStorage.getItem("groupByDates") ?? "true") === "true";
         const sortByGroupLocalStore = window.localStorage.getItem("sortGroupBy") ?? 'asc';
         const sortByLocalStore = window.localStorage.getItem("sortBy") ?? 'date_asc';
+
+        setShowOnly(showOnlyLocalStore)
         setGroupByDates(groupByDatesLocalStore)
         setSortGroupBy(sortByGroupLocalStore)
         setSortBy(sortByLocalStore)
         setFilterTodo({
+            showOnly,
             groupByDates: groupByDatesLocalStore,
             sortGroupBy: sortByGroupLocalStore,
             sortBy: sortByLocalStore
@@ -40,8 +45,10 @@ export default function SortTodo() {
         window.localStorage.setItem("groupByDates", String(groupByDates));
         window.localStorage.setItem("sortGroupBy", String(sortGroupBy));
         window.localStorage.setItem("sortBy", sortBy);
-        setFilterTodo({groupByDates, sortGroupBy: sortGroupBy, sortBy: sortBy})
-    }, [groupByDates, sortGroupBy, sortBy])
+        window.localStorage.setItem("showOnly", showOnly);
+
+        setFilterTodo({showOnly, groupByDates, sortGroupBy: sortGroupBy, sortBy: sortBy})
+    }, [groupByDates, sortGroupBy, sortBy, showOnly])
 
     return (
         <DropdownMenu>
@@ -57,6 +64,14 @@ export default function SortTodo() {
                                           onSelect={() => setGroupByDates(!groupByDates)}>
                     Group By Dates
                 </DropdownMenuCheckboxItem>
+                <DropdownMenuSeparator/>
+                <DropdownMenuLabel>Show Only</DropdownMenuLabel>
+                <DropdownMenuSeparator/>
+                <DropdownMenuRadioGroup value={showOnly} onValueChange={setShowOnly}>
+                    <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="completed">Completed</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="inprogress">Inprogress</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup><DropdownMenuSeparator/>
                 <DropdownMenuSeparator/>
                 {groupByDates &&
                     <><DropdownMenuRadioGroup value={sortGroupBy} onValueChange={setSortGroupBy}>

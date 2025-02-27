@@ -1,12 +1,18 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import {connectDB} from "@/db/db";
 import {searchGroupTodos} from "@/db/todo-repo";
-import {SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
+import {FilterTodo, SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
 import {User} from "@/db/entities/user";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
-    const {groupByDates, sortGroupBy, sortBy} = req.query
+    const {showOnly, sortGroupBy, sortBy} = req.query
+    const filterByTodo = {
+        showOnly,
+        sortGroupBy: sortGroupBy as SortGroupBy,
+        sortBy: sortBy as SortBy
+    } as FilterTodo
+
     const userId = req.cookies.user ?? ''
     try {
         switch (req.method) {
@@ -15,11 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const {searchText} = req.body;
                 console.log('searching...' + req.body);
                 const user = {id: userId} as User;
-                const todos = await searchGroupTodos(user, searchText ?? '', {
-                    groupByDates: groupByDates === "true",
-                    sortGroupBy: sortGroupBy as SortGroupBy,
-                    sortBy: sortBy as SortBy
-                });
+                const todos = await searchGroupTodos(user, searchText ?? '', filterByTodo);
                 return res.status(200).json(todos);
 
             // for all methods

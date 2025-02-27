@@ -5,6 +5,25 @@
 | ![login](login.png)          | ![img_2.png](docs/img_2.png) | ![img_1.png](docs/filter-wt.png) |
 | ![img_3.png](docs/img_3.png) | ![img_1.png](docs/img_1.png) | ![img.png](docs/filter.png)      |
 
+# Requirements
+
+- [X] Programming TypeScript (React + NextJS + PostgresSQL)
+- [X] Interface - Web
+- [X] Each to-do item must include the following Fields
+    -  [X] Title
+    -  [x] Description
+    -  [X] Due Date
+- [X] Functional
+    - [X] Create, Read, Update, Delete, Add the ability to mark.
+    - [X] Optional - Sorting todo items by due date or title
+    - [X] Optional - Filtering Options  (e.g., show only complete, or in-progress items).
+    - [X] Additional
+        - [X] Grouping TODO by dueDate and sorting the group
+        - [X] Dark and Light Mode
+        - [X] Multi user support
+        - [X] Advance Search functionality
+- [X] Shipping - Docker-Compose Ready - To prop it up in local environment and try it out
+
 # Running Locally
 
 > Please note the Following instructions are for a linux distro.
@@ -73,7 +92,7 @@ pnpm dev
 bun dev
 ```
 
-# Future Improvement
+# Note for Future Improvements
 
 ### Performance:
 

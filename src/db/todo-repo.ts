@@ -1,20 +1,21 @@
 import {AppDataSource} from "@/db/db";
 import {Todo} from "./entities/todo";
-import {SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
+import {FilterTodo, ShowOnly, SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
 import {SelectQueryBuilder} from "typeorm";
 import {User} from "@/db/entities/user";
 
-export async function getGroupedTodos(user: User, {sortGroupBy, sortBy}: { sortGroupBy: SortGroupBy, sortBy: SortBy }) {
+export async function getGroupedTodos(user: User, filterTodo: FilterTodo) {
     const todoRepository = AppDataSource.getRepository(Todo);
     const queryBuilder = todoRepository.createQueryBuilder('todo')
-    return prepareQueryBuilder(user, queryBuilder, {sortGroupBy, sortBy});
+    return prepareQueryBuilder(user, queryBuilder, filterTodo);
 }
 
-export async function searchGroupTodos(user: User, query: string, {groupByDates, sortGroupBy, sortBy}: {
-    groupByDates: boolean,
-    sortGroupBy: SortGroupBy,
-    sortBy: SortBy
-}) {
+export async function searchGroupTodos(user: User, query: string, {
+    showOnly,
+    groupByDates,
+    sortGroupBy,
+    sortBy
+}: FilterTodo) {
     const todoRepository = AppDataSource.getRepository(Todo);
     const normalizedQuery = query.replace(/'/g, '');
     // Sanitize words
@@ -28,13 +29,13 @@ export async function searchGroupTodos(user: User, query: string, {groupByDates,
     }*/
     queryBuilder.where('todo.title ILIKE :likeQuery', {likeQuery});
     if (groupByDates) {
-        return prepareQueryBuilder(user, queryBuilder, {sortGroupBy, sortBy});
+        return prepareQueryBuilder(user, queryBuilder, {sortGroupBy, sortBy, showOnly});
     }
     return prepareRegularQueryBuilder(user, queryBuilder, {sortBy})
 }
 
 async function prepareRegularQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<Todo>, {sortBy}: {
-    sortBy: SortBy
+    sortBy?: SortBy
 }) {
 
     queryBuilder.andWhere(`todo.userId = :userId`, {userId: user.id});
@@ -50,12 +51,22 @@ async function prepareRegularQueryBuilder(user: User, queryBuilder: SelectQueryB
     return await queryBuilder.getMany();
 }
 
-async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<Todo>, {sortGroupBy, sortBy}: {
-    sortGroupBy: SortGroupBy,
-    sortBy: SortBy
+async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<Todo>, {
+    sortGroupBy,
+    sortBy,
+    showOnly
+}: {
+    sortGroupBy: SortGroupBy, sortBy: SortBy,
+    showOnly: ShowOnly
 }) {
 
     queryBuilder.andWhere(`todo.userId = :userId`, {userId: user.id});
+
+    if (showOnly === 'completed') {
+        queryBuilder.andWhere(`todo.completed = :completed `, {completed: true});
+    } else if (showOnly === 'inprogress') {
+        queryBuilder.andWhere(`todo.completed = :completed `, {completed: false});
+    }
 
     // Sort Group
     queryBuilder.orderBy("TO_CHAR(todo.dueDate, 'YYYY-MM-DD')", 'ASC')
@@ -80,7 +91,7 @@ async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<
     const groupedTodos: { date: string, todos: Todo[] }[] = [];
 
     todos.forEach(todo => {
-        const {dueDate, id, title, completed} = todo;
+        const {dueDate, id, title, description, completed} = todo;
         //Formatting date
         const dateKey = dueDate.toISOString().split('T')[0];
 
@@ -94,6 +105,7 @@ async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<
         group.todos.push({
             id,
             title,
+            description,
             completed,
             dueDate
         } as Todo);

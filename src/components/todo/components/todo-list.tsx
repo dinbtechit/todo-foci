@@ -1,6 +1,6 @@
 'use client';
 import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {AlarmClock, Ellipsis, SquareCheckBig, Trash2, Undo} from "lucide-react";
+import {Ellipsis, Pencil, SquareCheckBig, Trash2, Undo} from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,7 +23,6 @@ import {useEffect, useState} from "react";
 import {cn} from "@/lib/utils";
 import {Skeleton} from "@/components/ui/skeleton";
 import {AddEditTodoDialog} from "@/components/todo/components/add-edit-todo-dialog";
-import {Button} from "@/components/ui/button";
 
 
 export default function TodoList() {
@@ -46,7 +45,7 @@ export default function TodoList() {
             setLoading(false)
         }
         load()
-    }, [filterTodo.groupByDates, filterTodo.sortGroupBy, filterTodo.sortBy]);
+    }, [filterTodo.showOnly, filterTodo.groupByDates, filterTodo.sortGroupBy, filterTodo.sortBy]);
 
     const todoList = filterTodo.groupByDates ? <GroupedTodoList todos={todosGroupedByDate}/> :
         <SingleViewTodoList todos={todos}/>
@@ -172,15 +171,13 @@ function TodoStatus(props: { todo: Todo, className?: string }) {
 
 function TodoCard(props: { todo: Todo, className?: string, headerClassName?: string }) {
     const [filterTodo,] = useAtom(filterTodoState)
-    const [selectedTodo, setSelectedTodo] = useState<Todo>(props.todo)
-
     return <Card className={cn(props.todo.completed ? "opacity-40 -z-10" : "", props.className)}>
         <CardHeader className={`flex flex-row justify-center items-center p-0 pr-5 ${props.headerClassName}`}>
             <div className="flex-1">
                 <CardTitle className="inline-flex justify-center items-center">
                     {!filterTodo.groupByDates &&
                         <div className="flex flex-col items-center space-y-0 mr-5
-                                        bg-gray-100 dark:bg-black/30 rounded-l-xl border-r h-full w-28 p-3">
+                                        bg-gray-100 dark:bg-black/30 rounded-l-xl border-r h-full w-28 p-6">
                                         <span
                                             className="text-red-400">{
                                             Intl.DateTimeFormat("en-CA", {month: "short"}).format(new Date(props.todo.dueDate))
@@ -193,28 +190,22 @@ function TodoCard(props: { todo: Todo, className?: string, headerClassName?: str
                     }
                     <div className="flex flex-col items-start flex-1">
                         <TodoTitle todo={props.todo}/>
-                        <CardDescription>
-                            <div className="inline-flex items-center flex-1">
+                        <span
+                            className="inline-flex -mt-2 hover:bg justify-center items-center text-xs mb-5 gap-2 text-gray-400/90">
 
-                                <AddEditTodoDialog todo={selectedTodo} trigger={
-                                    <Button variant="secondary" className="p-2"
-                                            onClick={() => setSelectedTodo(props.todo)}>
-                                        <AlarmClock/>
-                                        <span>
-                                        {Intl.DateTimeFormat("en-CA", {
-                                            timeStyle: "short",
-                                            hour12: true,
-                                        }).format(new Date(props.todo.dueDate))}
-                                        </span>
-                                    </Button>
-                                }/>
-                            </div>
+                            {Intl.DateTimeFormat("en-CA", {
+                                timeStyle: "short",
+                                hour12: true,
+                            }).format(new Date(props.todo.dueDate))}
+                        </span>
+                        <CardDescription className="">
+                            {props.todo.description}
                         </CardDescription>
                     </div>
                 </CardTitle>
 
             </div>
-            <div className="flex justify-center items-center h-full">
+            <div className="flex justify-start items-start h-full">
                 <Action todo={props.todo}/>
             </div>
         </CardHeader>
@@ -225,33 +216,36 @@ function Action(props: { todo: Todo }) {
 
     const {updateTodo} = useUpdateTodos()
     const {deleteTodo} = useDeleteTodos()
+    const [isOpen, setIsOpen] = useState(false)
 
 
     const completedToggle = async (id: string, completed: boolean) => {
         await updateTodo({id: id, completed: completed})
     }
 
-    return <DropdownMenu>
-        <DropdownMenuTrigger className="p-2 rounded-xl hover:bg-gray-800"
-        ><Ellipsis/></DropdownMenuTrigger>
-        <DropdownMenuContent>
-            {props.todo.completed ?
-                <>
-                    <DropdownMenuItem
-                        onClick={() => completedToggle(props.todo.id, false)}>
-                        <Undo/> Undo Complete</DropdownMenuItem>
-                    <DropdownMenuSeparator/>
-                </> :
-                <>
-                    <DropdownMenuItem
-                        onClick={() => completedToggle(props.todo.id, true)}>
-                        <SquareCheckBig/>Mark as Completed</DropdownMenuItem>
-                    <DropdownMenuSeparator/></>
-            }
-
-            <DropdownMenuItem onClick={() => deleteTodo(props.todo.id)}>
-                <Trash2/> Delete
-            </DropdownMenuItem>
-        </DropdownMenuContent>
-    </DropdownMenu>;
+    return (
+        <><AddEditTodoDialog todo={props.todo} open={isOpen} setOpen={setIsOpen}/><DropdownMenu>
+            <DropdownMenuTrigger className="p-2 rounded-xl hover:bg-gray-800"
+            ><Ellipsis/></DropdownMenuTrigger>
+            <DropdownMenuContent>
+                {props.todo.completed ?
+                    <>
+                        <DropdownMenuItem
+                            onClick={() => completedToggle(props.todo.id, false)}>
+                            <Undo/> Undo Complete</DropdownMenuItem>
+                        <DropdownMenuSeparator/>
+                    </> :
+                    <>
+                        <DropdownMenuItem
+                            onClick={() => completedToggle(props.todo.id, true)}>
+                            <SquareCheckBig/>Mark as Completed</DropdownMenuItem>
+                        <DropdownMenuSeparator/></>}
+                <DropdownMenuItem onClick={() => setIsOpen(true)}>
+                    <Pencil/> Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => deleteTodo(props.todo.id)}>
+                    <Trash2/> Delete
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu></>);
 }

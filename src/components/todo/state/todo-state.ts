@@ -4,4 +4,9 @@ import {atom} from "jotai";
 
 export const todoState = atom<Todo[]>([]);
 export const groupTodoByDateState = atom<GroupTodosByDate[]>([]);
-export const filterTodoState = atom<FilterTodo>({groupByDates: true, sortGroupBy: 'asc', sortBy: 'date_asc'})
+export const filterTodoState = atom<FilterTodo>({
+    showOnly: 'all',
+    groupByDates: true,
+    sortGroupBy: 'asc',
+    sortBy: 'date_asc'
+})

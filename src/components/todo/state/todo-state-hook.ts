@@ -6,7 +6,8 @@ export const useLoadTodos = () => {
     const [, setTodos] = useAtom(todoState)
     const [filterTodo,] = useAtom(filterTodoState)
     const loadTodos = async () => {
-        const sortQuery = `groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
+        const showBy = `showOnly=${filterTodo.showOnly}`
+        const sortQuery = `${showBy}&groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
         const response = await fetch(`/api/todos?${sortQuery}`);
         if (!response.ok) throw new Error('Failed to fetch todos');
         const data = await response.json();
@@ -19,7 +20,8 @@ export const useLoadGroupTodosByDate = () => {
     const [, setTodosByDate] = useAtom(groupTodoByDateState)
     const [filterTodo,] = useAtom(filterTodoState)
     const loadTodosByDate = async () => {
-        const sortQuery = `groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
+        const showBy = `showOnly=${filterTodo.showOnly}`
+        const sortQuery = `${showBy}&groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
         const response = await fetch(`/api/todos/group?${sortQuery}`);
         if (!response.ok) throw new Error('Failed to fetch todos');
         const data = await response.json();
@@ -32,7 +34,7 @@ export const useAddTodos = () => {
     const [filterTodo,] = useAtom(filterTodoState)
     const {loadTodos} = useLoadTodos();
     const {loadTodosByDate} = useLoadGroupTodosByDate();
-    const addTodo = async (title: string, dueDate: Date) => {
+    const addTodo = async (title: string, desc: string, dueDate: Date) => {
         const response = await fetch('/api/todos', {
             method: 'POST',
             headers: {
@@ -40,6 +42,7 @@ export const useAddTodos = () => {
             },
             body: JSON.stringify({
                 title: title,
+                desc: desc,
                 dueDate: dueDate
             }),
         });
@@ -61,13 +64,14 @@ export const useUpdateTodos = () => {
     const {loadTodosByDate} = useLoadGroupTodosByDate();
     const [filterTodo,] = useAtom(filterTodoState)
     const updateTodo = async (data: {
-        id: string, title?: string, dueDate?: Date, completed?: boolean
+        id: string, title?: string, description?: string, dueDate?: Date, completed?: boolean
     }) => {
         const response = await fetch(`/api/todos/${data.id}`, {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
                 title: data.title,
+                description: data.description,
                 dueDate: data.dueDate,
                 completed: data.completed,
             }),
