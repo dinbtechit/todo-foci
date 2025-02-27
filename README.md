@@ -2,7 +2,7 @@
 
 |                              |                              |                                  |
 |------------------------------|------------------------------|----------------------------------|
-| ![login](login.png)          | ![img_2.png](docs/img_2.png) | ![img_1.png](docs/filter-wt.png) |
+| ![login](docs/login.png)     | ![img_2.png](docs/img_2.png) | ![img_1.png](docs/filter-wt.png) |
 | ![img_3.png](docs/img_3.png) | ![img_1.png](docs/img_1.png) | ![img.png](docs/filter.png)      |
 
 # Requirements

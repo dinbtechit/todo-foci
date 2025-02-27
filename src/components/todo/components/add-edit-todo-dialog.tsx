@@ -54,7 +54,7 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
         if (open) {
             onCloseDialog(true);
         }
-    }, [todo?.dueDate, todo?.description, todo?.title]);
+    }, [todo, todo?.dueDate, todo?.description, todo?.title]);
 
     const isValidDate = (date: Date | null | undefined) => {
         return date instanceof Date && !isNaN(date as unknown as number);
@@ -121,6 +121,7 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
         try {
             // If todo exists, update it
             if (todo && dueDate) {
+                console.log('updating...')
                 console.log(desc)
                 await updateTodo({id: todo.id, title: title, description: desc, dueDate: dueDate})
                 resetForm()

@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (dueDate) {
             todoToUpdate.dueDate = dueDate;
         }
-        if (description) {
+        if (description || description === "") {
             todoToUpdate.description = description;
         }
         await todoRepo.save(todoToUpdate);
