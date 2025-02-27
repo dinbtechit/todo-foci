@@ -70,9 +70,8 @@ export default function SortTodo() {
                 <DropdownMenuRadioGroup value={showOnly} onValueChange={setShowOnly}>
                     <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="completed">Completed</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="inprogress">Inprogress</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="inprogress">InProgress</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup><DropdownMenuSeparator/>
-                <DropdownMenuSeparator/>
                 {groupByDates &&
                     <><DropdownMenuRadioGroup value={sortGroupBy} onValueChange={setSortGroupBy}>
                         <DropdownMenuLabel>Sort Group By</DropdownMenuLabel>
@@ -81,11 +80,11 @@ export default function SortTodo() {
                     </DropdownMenuRadioGroup><DropdownMenuSeparator/></>
                 }
                 <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
-                    <DropdownMenuLabel>Sort By Dates</DropdownMenuLabel>
+                    <DropdownMenuLabel>Sort By Dates {groupByDates && '(Within Group)'}</DropdownMenuLabel>
                     <DropdownMenuRadioItem value="date_asc">Ascending</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="date_desc">Descending</DropdownMenuRadioItem>
                     <DropdownMenuSeparator/>
-                    <DropdownMenuLabel>Sort By Title</DropdownMenuLabel>
+                    <DropdownMenuLabel>Sort By Title {groupByDates && '(Within Group)'}</DropdownMenuLabel>
                     <DropdownMenuRadioItem value="title_asc">Ascending</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="title_desc">Descending</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
