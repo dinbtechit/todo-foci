@@ -62,6 +62,7 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
 
     const resetForm = () => {
         setTitle('')
+        setDesc('')
         setDueDate(null)
     }
 
