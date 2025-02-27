@@ -50,13 +50,15 @@ export default function Login() {
             <Card className="flex flex-col h-auto">
                 <CardHeader>
                     <CardTitle>
-                        <h1>Login or Register</h1>
-                        <hr className="mt-8"/>
+                        <h1 className="mb-3">Login/Register</h1>
+                        <small className="text-gray-500">Enter your username to login or a new username to
+                            register!!</small>
+                        <hr className="mt-4"/>
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col justify-center items-start space-y-2">
-                    <small className="text-gray-500">Please enter your username or a new username to register!!</small>
-                    <span className="text-sm font-semibold text-gray-500">Accepted Characters:</span>
+                    <span className="inline-flex text-sm font-semibold
+                        text-gray-500">Accepted Characters:</span>
                     <ul className="text-sm text-gray-500/90 list-disc">
                         <ol> - Max 8 characters</ol>
                         <ol> - Alpha-Numeric, special characters, even emoji&#39;s 🎉</ol>
@@ -73,7 +75,7 @@ export default function Login() {
                         onKeyDown={(e) => e.key === "Enter" && login()}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    {error && <span className="text-red-500">{error}</span>}
+                    {error && <span className="text-red-500 text-xs">{error}</span>}
                 </CardContent>
                 <CardFooter>
                     <Button className="bg-primary hover:bg-primary/95 w-full"
