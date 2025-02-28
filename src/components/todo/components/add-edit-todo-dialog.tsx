@@ -122,8 +122,6 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
         try {
             // If todo exists, update it
             if (todo && dueDate) {
-                console.log('updating...')
-                console.log(desc)
                 await updateTodo({id: todo.id, title: title, description: desc, dueDate: dueDate})
                 resetForm()
                 onCloseDialog(false)
@@ -145,7 +143,7 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
         }
     };
 
-    function formatDateToDatetimeLocal(date: Date | null | undefined) {
+    const formatDateForDatePicker = (date: Date | null | undefined) => {
         if (!date || !isValidDate(date)) return;
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // months are 0-based
@@ -219,7 +217,7 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
                         <Input
                             id="dueDate"
                             type={"datetime-local"}
-                            value={dueDate ? formatDateToDatetimeLocal(dueDate) : ""}
+                            value={dueDate ? formatDateForDatePicker(dueDate) : ""}
                             onChange={(e) => e.currentTarget.value ? setDueDate(new Date(e.currentTarget.value)) : setDueDate(null)}
                             className="w-full"
                         />

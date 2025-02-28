@@ -13,13 +13,13 @@ export class Todo {
     @Column({nullable: true})
     description: string;
 
-    @Column({type: 'timestamp'})
+    @Column({type: 'timestamptz'})
     dueDate: Date;
 
     @Column({default: false})
     completed: boolean;
 
-    @Column({type: 'timestamp'})
+    @Column({type: 'timestamptz'})
     createdAt: Date;
 
     @ManyToOne(() => User, (user) => user.id)

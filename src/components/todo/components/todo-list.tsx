@@ -195,6 +195,7 @@ function TodoCard(props: { todo: Todo, className?: string, headerClassName?: str
                             className="inline-flex -mt-2 hover:bg justify-center items-center text-xs mb-5 gap-2 text-gray-400/90">
 
                             {Intl.DateTimeFormat("en-CA", {
+                                dateStyle: 'full',
                                 timeStyle: "short",
                                 hour12: true,
                             }).format(new Date(props.todo.dueDate))}
