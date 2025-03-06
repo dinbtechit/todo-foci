@@ -71,7 +71,8 @@
     }
 
     body {
-        @apply bg-background text-foreground;
+        background-image: radial-gradient(at 93% 0%, hsl(135deg 89% 65% / 3%) 0px, transparent 50%), radial-gradient(at 53% 34%, hsl(240deg 89% 65% / 5%) 0px, transparent 50%), radial-gradient(at 19% 1%, hsl(184deg 89% 66% / 5%) 0px, transparent 50%), radial-gradient(at 56% 73%, hsl(14deg 85% 75% / 6%) 0px, transparent 50%), radial-gradient(at 55% 22%, hsl(55deg 93% 77% / 10%) 0px, transparent 50%);
+        @apply dark:bg-black text-foreground;
     }
 
     h1 {

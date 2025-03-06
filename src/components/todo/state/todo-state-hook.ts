@@ -106,7 +106,6 @@ export const useDeleteTodos = () => {
     return {deleteTodo};
 }
 
-
 export const useSearchTodos = () => {
     const [, setTodosByDate] = useAtom(groupTodoByDateState)
     const [, setTodos] = useAtom(todoState)

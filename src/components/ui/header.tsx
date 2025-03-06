@@ -1,6 +1,5 @@
 'use client';
 import {ThemeToggle} from "@/components/ui/theme-toggle";
-import SortTodo from "@/components/todo/components/sort-todo";
 import SearchTodo from "@/components/todo/components/search-todo";
 import {useRouter} from "next/navigation";
 import {isLoggedInState, userState} from "@/components/user/state/user-state";
@@ -65,7 +64,7 @@ export default function Header() {
             <h1 className="order-1 text-2xl inline-block whitespace-nowrap font-bold text-white">Foci To-Do</h1>
             <div className="order-3 md:order-2 w-full md:max-w-2xl inline-flex gap-2 justify-center items-center">
                 {user &&
-                    <><SearchTodo/><SortTodo/></>
+                    <><SearchTodo/></>
                 }
             </div>
             <div className="order-2 md:order-3 flex items-center gap-4">

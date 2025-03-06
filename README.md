@@ -13,7 +13,9 @@ Checkout the live app here -> https://todo.dsite.ca
 
 # Requirements
 
-- [X] Programming TypeScript (React + NextJS + PostgresSQL)
+- [X] Programming TypeScript (![](https://api.iconify.design/devicon/react.svg)
+  React + ![](https://api.iconify.design/devicon/nextjs.svg)
+  NextJS + ![](https://api.iconify.design/devicon/postgresql.svg) PostgresSQL)
 - [X] Interface - Web
 - [X] Each to-do item must include the following Fields
     -  [X] Title

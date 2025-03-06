@@ -54,7 +54,7 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
         if (open) {
             onCloseDialog(true);
         }
-    }, [todo, todo?.dueDate, todo?.description, todo?.title]);
+    }, [todo]);
 
     const isValidDate = (date: Date | null | undefined) => {
         return date instanceof Date && !isNaN(date as unknown as number);
@@ -157,7 +157,7 @@ export function AddEditTodoDialog({trigger, open, onCloseDialog, todo}: AddDialo
     return (
         <Dialog open={open} onOpenChange={onCloseDialog}>
             <DialogTrigger asChild>
-                {trigger ?? open ?? <Button className="w-320 rounded-2xl text-white font-semibold text-lg">
+                {(trigger || open) ?? <Button className="w-320 rounded-2xl text-white font-semibold text-lg">
                     <Plus className="scale-150 text-white"/> Create Todo
                 </Button>}
             </DialogTrigger>

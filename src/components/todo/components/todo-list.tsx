@@ -45,7 +45,7 @@ export default function TodoList() {
             setLoading(false)
         }
         load()
-    }, [filterTodo.showOnly, filterTodo.groupByDates, filterTodo.sortGroupBy, filterTodo.sortBy]);
+    }, [filterTodo]);
 
     const todoList = filterTodo.groupByDates ? <GroupedTodoList todos={todosGroupedByDate}/> :
         <SingleViewTodoList todos={todos}/>

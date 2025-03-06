@@ -11,17 +11,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useAtom} from "jotai";
 import {filterTodoState} from "@/components/todo/state/todo-state";
-import {ShowOnly, SortBy, SortGroupBy} from "@/components/todo/model/todo-model";
 
 export default function SortTodo() {
-    const [groupByDates, setGroupByDates] = useState(true)
-    const [sortBy, setSortBy] = useState<SortBy | string>('date_asc')
-    const [sortGroupBy, setSortGroupBy] = useState<SortGroupBy | string>('asc')
-    const [, setFilterTodo] = useAtom(filterTodoState)
-    const [showOnly, setShowOnly] = useState<ShowOnly | string>('all')
+    const [filterTodo, setFilterTodo] = useAtom(filterTodoState)
 
     useEffect(() => {
         const showOnlyLocalStore = window.localStorage.getItem("showOnly") ?? 'all';
@@ -29,12 +24,8 @@ export default function SortTodo() {
         const sortByGroupLocalStore = window.localStorage.getItem("sortGroupBy") ?? 'asc';
         const sortByLocalStore = window.localStorage.getItem("sortBy") ?? 'date_asc';
 
-        setShowOnly(showOnlyLocalStore)
-        setGroupByDates(groupByDatesLocalStore)
-        setSortGroupBy(sortByGroupLocalStore)
-        setSortBy(sortByLocalStore)
         setFilterTodo({
-            showOnly,
+            showOnly: showOnlyLocalStore,
             groupByDates: groupByDatesLocalStore,
             sortGroupBy: sortByGroupLocalStore,
             sortBy: sortByLocalStore
@@ -42,13 +33,12 @@ export default function SortTodo() {
     }, []);
 
     useEffect(() => {
-        window.localStorage.setItem("groupByDates", String(groupByDates));
-        window.localStorage.setItem("sortGroupBy", String(sortGroupBy));
-        window.localStorage.setItem("sortBy", sortBy);
-        window.localStorage.setItem("showOnly", showOnly);
+        window.localStorage.setItem("groupByDates", String(filterTodo.groupByDates));
+        window.localStorage.setItem("sortGroupBy", String(filterTodo.sortGroupBy));
+        window.localStorage.setItem("sortBy", filterTodo.sortBy);
+        window.localStorage.setItem("showOnly", filterTodo.showOnly);
 
-        setFilterTodo({showOnly, groupByDates, sortGroupBy: sortGroupBy, sortBy: sortBy})
-    }, [groupByDates, sortGroupBy, sortBy, showOnly])
+    }, [filterTodo])
 
     return (
         <DropdownMenu>
@@ -60,31 +50,46 @@ export default function SortTodo() {
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>Filter Settings</DropdownMenuLabel>
                 <DropdownMenuSeparator/>
-                <DropdownMenuCheckboxItem checked={groupByDates}
-                                          onSelect={() => setGroupByDates(!groupByDates)}>
+                <DropdownMenuCheckboxItem checked={filterTodo.groupByDates}
+                                          onSelect={() => setFilterTodo(prev => ({
+                                              ...prev,
+                                              groupByDates: !prev.groupByDates
+                                          }))}>
                     Group By Dates
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuSeparator/>
                 <DropdownMenuLabel>Show Only</DropdownMenuLabel>
                 <DropdownMenuSeparator/>
-                <DropdownMenuRadioGroup value={showOnly} onValueChange={setShowOnly}>
+                <DropdownMenuRadioGroup value={filterTodo.showOnly}
+                                        onValueChange={(value) => setFilterTodo(prev => ({
+                                            ...prev,
+                                            showOnly: value
+                                        }))}>
                     <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="completed">Completed</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="inprogress">InProgress</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup><DropdownMenuSeparator/>
-                {groupByDates &&
-                    <><DropdownMenuRadioGroup value={sortGroupBy} onValueChange={setSortGroupBy}>
+                {filterTodo.groupByDates &&
+                    <><DropdownMenuRadioGroup value={filterTodo.sortGroupBy}
+                                              onValueChange={(value) => setFilterTodo(prev => ({
+                                                  ...prev,
+                                                  sortGroupBy: value
+                                              }))}>
                         <DropdownMenuLabel>Sort Group By</DropdownMenuLabel>
                         <DropdownMenuRadioItem value="asc">Ascending</DropdownMenuRadioItem>
                         <DropdownMenuRadioItem value="desc">Descending</DropdownMenuRadioItem>
                     </DropdownMenuRadioGroup><DropdownMenuSeparator/></>
                 }
-                <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
-                    <DropdownMenuLabel>Sort By Dates {groupByDates && '(Within Group)'}</DropdownMenuLabel>
+                <DropdownMenuRadioGroup value={filterTodo.sortBy}
+                                        onValueChange={(value) => setFilterTodo(prev => ({
+                                            ...prev,
+                                            sortBy: value
+                                        }))}>
+                    <DropdownMenuLabel>Sort By Dates {filterTodo.groupByDates && '(Within Group)'}</DropdownMenuLabel>
                     <DropdownMenuRadioItem value="date_asc">Ascending</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="date_desc">Descending</DropdownMenuRadioItem>
                     <DropdownMenuSeparator/>
-                    <DropdownMenuLabel>Sort By Title {groupByDates && '(Within Group)'}</DropdownMenuLabel>
+                    <DropdownMenuLabel>Sort By Title {filterTodo.groupByDates && '(Within Group)'}</DropdownMenuLabel>
                     <DropdownMenuRadioItem value="title_asc">Ascending</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="title_desc">Descending</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>

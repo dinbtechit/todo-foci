@@ -5,9 +5,6 @@ import {connectDB} from "@/db/db";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
-    const cookieStore = req.cookies
-    console.log(cookieStore)
-    console.log(req.headers.cookie)
     try {
         switch (req.method) {
             case 'GET':
