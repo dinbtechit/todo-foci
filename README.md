@@ -1,5 +1,11 @@
 ## Foci To-Do app (Multi User)
 
+Checkout the live app here -> https://todo.dsite.ca
+
+> [!IMPORTANT]  
+> The site is hosted on my on-prem ARM 64 pi server. So might not be always up. Reachout to me if you want to check it out.
+
+
 |                                 |                                     |                                   |
 |---------------------------------|-------------------------------------|-----------------------------------|
 | ![img.png](docs/login.png)      | ![img.png](docs/list-todo.png)      | ![img.png](docs/filter-light.png) |
