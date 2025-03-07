@@ -2,7 +2,7 @@
 import {Input} from "@/components/ui/input";
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useAtom} from "jotai";
 import {isLoggedInState, userState} from "@/components/user/state/user-state";
@@ -11,8 +11,15 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
-    const [, setUser] = useAtom(userState)
+    const [user, setUser] = useAtom(userState)
     const [, setLoggedin] = useAtom(isLoggedInState)
+
+    useEffect(() => {
+        if (user) {
+            setLoggedin(true);
+            router.push('/home')
+        }
+    })
 
     const login = async () => {
         if (!email) {
@@ -46,6 +53,7 @@ export default function Login() {
     }
 
     return (
+        !user &&
         <div className="flex flex-col justify-center items-center h-full w-full">
             <Card className="flex flex-col h-auto">
                 <CardHeader>
