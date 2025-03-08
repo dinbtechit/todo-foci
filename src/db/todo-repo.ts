@@ -98,6 +98,9 @@ async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<
         const dueDateLocal = new Date(dueDate.getTime() - (offset * 60 * 1000))
         const dateKey = dueDateLocal.toISOString().split('T')[0];
 
+        console.log(dueDateLocal.toISOString())
+        console.log(dueDate.toISOString())
+
         let group = groupedTodos.find(g => g.date === dateKey);
 
         if (!group) {
