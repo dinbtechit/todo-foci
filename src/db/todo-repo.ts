@@ -92,8 +92,11 @@ async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<
 
     todos.forEach(todo => {
         const {dueDate, id, title, description, completed} = todo;
-        //Formatting date
-        const dateKey = dueDate.toISOString().split('T')[0];
+
+        //Formatting date to localtime
+        const offset = dueDate.getTimezoneOffset()
+        const dueDateLocal = new Date(dueDate.getTime() - (offset * 60 * 1000))
+        const dateKey = dueDateLocal.toISOString().split('T')[0];
 
         let group = groupedTodos.find(g => g.date === dateKey);
 
