@@ -55,7 +55,7 @@ export const useAddTodos = () => {
             body: JSON.stringify({
                 title: title,
                 description: description,
-                dueDate: `${dueDate}`
+                dueDate: dueDate
             }),
         });
         if (!response.ok) {
@@ -87,7 +87,7 @@ export const useUpdateTodos = () => {
             body: JSON.stringify({
                 title: data.title,
                 description: data.description,
-                dueDate: `${data.dueDate}`,
+                dueDate: data.dueDate,
                 completed: data.completed,
             }),
         });
