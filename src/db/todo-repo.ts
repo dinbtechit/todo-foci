@@ -94,20 +94,18 @@ async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<
         const {dueDate, id, title, description, completed} = todo;
 
         //Formatting date to localtime
-        const offset = dueDate.getTimezoneOffset()
-        const dueDateLocal = new Date(dueDate.getTime() - (offset * 60 * 1000))
-        const dateKey = dueDateLocal.toISOString().split('T')[0];
-
         const formattedDate = new Intl.DateTimeFormat('en-US', {
             timeZone: timezone,
             year: 'numeric',
-            month: 'long',
-            day: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
         }).format(dueDate);
 
-        console.log(dueDateLocal)
-        console.log(dueDate)
+        const [month, day, year] = formattedDate.split('/');
+        // Reformat into YYYY-MM-DD
+        const dateKey = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
         console.log('formattedDate', formattedDate)
+        console.log('dateKey', dateKey)
 
         let group = groupedTodos.find(g => g.date === dateKey);
 
