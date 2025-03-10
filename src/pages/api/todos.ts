@@ -67,6 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Create a new todo
             case 'POST':
                 const {title, description, dueDate} = req.body;
+                console.log('add server', new Date(dueDate).toLocaleDateString())
                 if (!title) return res.status(400).json({error: 'Title is required'});
                 if (!dueDate) return res.status(400).json({error: 'DueDate is required'});
                 const createdAt = new Date();

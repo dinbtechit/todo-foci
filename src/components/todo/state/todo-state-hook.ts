@@ -8,7 +8,12 @@ export const useLoadTodos = () => {
     const loadTodos = async () => {
         const showBy = `showOnly=${filterTodo.showOnly}`
         const sortQuery = `${showBy}&groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
-        const response = await fetch(`/api/todos?${sortQuery}`);
+        const response = await fetch(`/api/todos?${sortQuery}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "x-timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
+            },
+        });
         if (!response.ok) throw new Error('Failed to fetch todos');
         const data = await response.json();
         setTodos(data);
@@ -20,9 +25,15 @@ export const useLoadGroupTodosByDate = () => {
     const [, setTodosByDate] = useAtom(groupTodoByDateState)
     const [filterTodo,] = useAtom(filterTodoState)
     const loadTodosByDate = async () => {
+        console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
         const showBy = `showOnly=${filterTodo.showOnly}`
         const sortQuery = `${showBy}&groupByDates=${filterTodo.groupByDates}&sortGroupBy=${filterTodo.sortGroupBy}&sortBy=${filterTodo.sortBy}`
-        const response = await fetch(`/api/todos/group?${sortQuery}`);
+        const response = await fetch(`/api/todos/group?${sortQuery}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "X-Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
+            },
+        });
         if (!response.ok) throw new Error('Failed to fetch todos');
         const data = await response.json();
         setTodosByDate(data);
@@ -39,6 +50,7 @@ export const useAddTodos = () => {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
+                "x-timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
             },
             body: JSON.stringify({
                 title: title,
@@ -68,7 +80,10 @@ export const useUpdateTodos = () => {
     }) => {
         const response = await fetch(`/api/todos/${data.id}`, {
             method: "PUT",
-            headers: {"Content-Type": "application/json"},
+            headers: {
+                "Content-Type": "application/json",
+                "x-timezone": Intl.DateTimeFormat().resolvedOptions().timeZone
+            },
             body: JSON.stringify({
                 title: data.title,
                 description: data.description,

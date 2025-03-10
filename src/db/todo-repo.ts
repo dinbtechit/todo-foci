@@ -4,10 +4,10 @@ import {FilterTodo, ShowOnly, SortBy, SortGroupBy} from "@/components/todo/model
 import {SelectQueryBuilder} from "typeorm";
 import {User} from "@/db/entities/user";
 
-export async function getGroupedTodos(user: User, filterTodo: FilterTodo) {
+export async function getGroupedTodos(user: User, filterTodo: FilterTodo, timezone?: string) {
     const todoRepository = AppDataSource.getRepository(Todo);
     const queryBuilder = todoRepository.createQueryBuilder('todo')
-    return prepareQueryBuilder(user, queryBuilder, filterTodo);
+    return prepareQueryBuilder(user, queryBuilder, filterTodo, timezone);
 }
 
 export async function searchGroupTodos(user: User, query: string, {
@@ -15,7 +15,7 @@ export async function searchGroupTodos(user: User, query: string, {
     groupByDates,
     sortGroupBy,
     sortBy
-}: FilterTodo) {
+}: FilterTodo, timezone?: string) {
     const todoRepository = AppDataSource.getRepository(Todo);
     const normalizedQuery = query.replace(/'/g, '');
     // Sanitize words
@@ -29,7 +29,7 @@ export async function searchGroupTodos(user: User, query: string, {
     }*/
     queryBuilder.where('todo.title ILIKE :likeQuery', {likeQuery});
     if (groupByDates) {
-        return prepareQueryBuilder(user, queryBuilder, {sortGroupBy, sortBy, showOnly});
+        return prepareQueryBuilder(user, queryBuilder, {sortGroupBy, sortBy, showOnly}, timezone);
     }
     return prepareRegularQueryBuilder(user, queryBuilder, {sortBy})
 }
@@ -58,7 +58,7 @@ async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<
 }: {
     sortGroupBy: SortGroupBy, sortBy: SortBy,
     showOnly: ShowOnly
-}) {
+}, timezone: string = 'UTC') {
 
     queryBuilder.andWhere(`todo.userId = :userId`, {userId: user.id});
 
@@ -98,8 +98,16 @@ async function prepareQueryBuilder(user: User, queryBuilder: SelectQueryBuilder<
         const dueDateLocal = new Date(dueDate.getTime() - (offset * 60 * 1000))
         const dateKey = dueDateLocal.toISOString().split('T')[0];
 
+        const formattedDate = new Intl.DateTimeFormat('en-US', {
+            timeZone: timezone,
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        }).format(dueDate);
+
         console.log(dueDateLocal)
         console.log(dueDate)
+        console.log('formattedDate', formattedDate)
 
         let group = groupedTodos.find(g => g.date === dateKey);
 

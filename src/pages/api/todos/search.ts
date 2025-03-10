@@ -14,6 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         sortBy: sortBy as SortBy
     } as FilterTodo
 
+    const timezone = req.headers["x-timezone"] as string || 'UTC'
+    console.log('TimeZone:', req.headers["x-timezone"])
+
     const userId = req.cookies.user ?? ''
     try {
         switch (req.method) {
@@ -22,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 const {searchText} = req.body;
                 console.log('searching...', JSON.stringify(req.body));
                 const user = {id: userId} as User;
-                const todos = await searchGroupTodos(user, searchText ?? '', filterByTodo);
+                const todos = await searchGroupTodos(user, searchText ?? '', filterByTodo, timezone);
                 return res.status(200).json(todos);
 
             // for all methods

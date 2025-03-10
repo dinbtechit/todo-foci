@@ -14,13 +14,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         sortBy: sortBy as SortBy
     } as FilterTodo
 
+    const timezone = req.headers["x-timezone"] as string || 'UTC'
+    console.log('TimeZone:', req.headers["x-timezone"])
+
     try {
         switch (req.method) {
             // Get grouped Todos
             case 'GET':
                 const userId = req.cookies.user
                 const user = {id: userId} as User;
-                const todos = await getGroupedTodos(user, filterByTodo);
+                const todos = await getGroupedTodos(user, filterByTodo, timezone);
                 return res.status(200).json(todos);
 
             // for all methods
