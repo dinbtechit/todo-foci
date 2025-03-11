@@ -60,8 +60,10 @@ export default function Header() {
     }
 
     return (
-        <header className="flex flex-col md:flex-row md:items-center md:justify-between p-4 bg-[#159D7B] gap-2 ">
-            <h1 className="order-1 text-2xl inline-block whitespace-nowrap font-bold text-white">Foci To-Do</h1>
+        <header
+            className="flex flex-col md:flex-row md:items-start md:justify-between p-4 gap-2
+              bg-gradient-to-bl from-[#5AD1D9] via-[#49CCA6] to-[#159D7B]">
+            <h1 className="order-1 text-2xl inline-block whitespace-nowrap font-bold text-white">Multi User To-Do</h1>
             <div className="order-3 md:order-2 w-full md:max-w-2xl inline-flex gap-2 justify-center items-center">
                 {user &&
                     <><SearchTodo/></>

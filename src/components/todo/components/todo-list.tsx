@@ -1,6 +1,6 @@
 'use client';
 import {Card, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Ellipsis, Pencil, SquareCheckBig, Trash2, Undo} from "lucide-react";
+import {AlarmClock, Ellipsis, Pencil, SquareCheckBig, Trash2, Undo} from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -193,9 +193,9 @@ function TodoCard(props: { todo: Todo, className?: string, headerClassName?: str
                         <TodoTitle todo={props.todo}/>
                         <span
                             className="inline-flex -mt-2 hover:bg justify-center items-center text-xs mb-5 gap-2 text-gray-400/90">
+                            <AlarmClock className="w-4 h-4"/>
 
                             {Intl.DateTimeFormat("en-CA", {
-                                dateStyle: 'full',
                                 timeStyle: "short",
                                 hour12: true,
                             }).format(new Date(props.todo.dueDate))}
